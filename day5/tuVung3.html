@@ -1,0 +1,38 @@
+<!-- Từ vựng ngày  5.1 và 5.2 : Object (đối tượng)
+    - Object (đối tượng) : là 1 cấu trúc dữ liệu lưu trữ dữ liệu dưới dạng cặp key và value
+    -> dữ liệu được lưu trong đối tượng là : number , string , arr , obj khác
+    - Khai báo đối tượng : + cách 1 : sử dụng dấu {}
+        + cách 2 : new Object()
+        -> cung cấp cho đối tượng vùng nhớ biến đối tượng tham chiếu đến vùng nhớ đó
+        -> khi gán 1 biến khác = biến đối tượng ban đầu thì lúc này chỉ đang tham chiếu đến vùng nhớ của đối tượng đó
+    - Các thao tác cơ bản với đối tượng :
+        + lấy value dựa trên key : sử dụng dấu . hoặc dấu []
+            -> dấu [] dùng khi key là 1 chuỗi
+        + thêm thuộc tính (key và value) : obj[key] = value
+        + xóa thuộc tính (key và value) : delete obj[key]
+        + sửa thuộc tính (key và value): obj[key] = value mới
+        
+    - Các thao tác quan trọng với đối tượng :
+        + kiểm tra 1 thuộc tính có phải là thuộc tính của obj không ?
+            - sử dụng in operator : trả về true/false ->tất cả thuộc tính trong obj và các thuộc tính được kế thừa
+            - sử dụng phương thức hasOwnProperty() : trả về true/false -> chỉ tính các thuộc tính là riêng của obj đang kiểm tra
+        + duyệt qua các thuộc tính trong obj :
+            - Object.keys() -> duyệt qua toàn bộ thuộc tính -> lấy key thêm vào mảng -> trả về mảng 
+                -> sử dụng forEach để duyệt qua tất cả các phần tử trong mảng
+                -> dùng khi lấy các key trong obj 
+            - Object.values() -> duyệt qua toàn bộ thuộc tính -> lấy value thêm vào mảng -> trả về mảng
+                -> sử dụng forEach duyệt qua
+                -> dùng khi cần thao tác với dữ liệu không cần key
+            - Object.entries() -> duyệt qua toàn bộ thuộc tính -> lấy cả key và value thêm vào 1 mảng con -> thêm mảng con vào mảng cha -> trả về mảng 2 chiều
+                -> sử dụng forEach duyệt qua -> lúc này mỗi phần tử là 1 mảng
+                -> dùng khi cần thao tác với cả key và value
+            -> vòng lặp forEach cách hoạt động : 
+                - cú pháp : arr.forEach(function(currentValue,index,array){ câu lệnh });
+                -> 3 tham số trong hàm , currentValue là tham số bắt buộc : dữ liệu trong mảng cần thao tác
+                    2 tham số không bắt buộc : index : vị trí index của dữ liệu đang thao tác , array : mảng đang thao tác
+                - cách hoạt động : mỗi lần lặp sẽ duyệt qua 1 dữ liệu nằm trong mảng cho đến khi hết các phần tử trong mảng 
+                -> mỗi lần lặp sẽ thực hiện thao tác trong hàm 
+        + sao chép obj :
+            - sử dụng spread operator : sao chép các thuộc tính riêng của obj này sang obj mới
+            -> chỉ áp dụng sao chép đối với các thuộc tính mang dữ liệu nguyên thủy , các dữ liệu arr/obj chỉ tham chiếu đến dữ liệu đó 
+-->

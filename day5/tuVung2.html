@@ -1,0 +1,30 @@
+<!-- từ vựng ngày 4 
+    - Array (Mảng) là 1 cấu trúc dữ liệu lưu trữ dữ liệu liên tục trong vùng nhớ của nó
+    - Thực hiện các thao tác cơ bản thêm , sửa , xóa bằng các thuộc tính và phương thức có sẵn
+        + thuộc tính length -> trả về kích thước của mảng
+        + phương thức push() -> thêm 1 phần tử vào cuối mảng , pop() -> xóa 1 phần tử cuối mảng rồi trả về giá trị của nó
+    - Các thao tác quan trọng 
+        + kiểm tra xem mảng có phải 1 mảng không -> vì type of của 1 biến mảng trả về obj 
+        -> xác định 1 mảng để phân biệt arr và obj bằng phương thức Array.isArray() -> trả về true/false là arr sẽ trả về true và ngược lại
+        + Duyệt qua các giá trị trong mảng -> vì mảng là 1 iterator (obj mang thuộc tính cho phép duyệt qua các phần tử trong nó)
+        -> sử dụng vòng lặp để duyệt qua các giá trị -> for of , forEach 
+        + Sao chép mảng -> vì biến mảng chỉ đang gán với địa chỉ vùng nhớ của mảng 
+            -> sử dụng spread operator toán tử chỉ dùng với các iterator
+            -> spread operator phân giải các phần tử trong mảng thành các phần tử độc lập -> sau đó sao chép các phần tử đó sang mảng mới
+            -> chỉ áp dụng với các phần tử trong mảng là các dữ liệu primitive (nguyên thủy)
+            -> với dữ liệu là arr/obj chỉ đang sao chép vùng nhớ của arr/obj vẫn làm thay đổi dữ liệu mảng cũ 
+-->
+<!-- từ vựng ngày 5.1
+    - Object (đối tượng) là 1 cấu trúc dữ liệu lưu trữ các dữ liệu dưới dạng key và value
+    -> obj lưu được hầu hết các dữ liệu số , chuỗi , logic , mảng , obj khác
+    - Thực hiện các thao tác cơ bản thêm , sửa , xóa 1 thuộc tính (1 cặp key và value) trong obj
+        + thêm obj.[key] = value -> lúc này đã thêm được 1 thuộc tính mới truy cập thông qua dấu .
+        + sửa obj.[key] = value mới
+        + xóa delete obj.[key]
+    - Thao tác quan trọng 
+        + kiểm tra xem 1 thuộc tính nó có thuộc obj này hay không
+            -> sử dụng in operator : toán tử in xác định thuộc tính này có phải thuộc tính của obj này hay không trả về true/false
+            -> sử dụng toán tử in nó sẽ tính cả các thuộc tính thừa kế -> là các thuộc tính không trực tiếp nằm trong obj mà thừa hưởng thông qua thừa kế
+            -> sử dụng hàm hasOwnPropety() : phương thức kiểm tra thuộc tính này có là của riêng obj này hay không trả về true/false 
+            -> phương thức này chỉ tính riêng các thuộc tính trực tiếp của obj không chấp nhận các thuộc tính được kế thừa
+-->

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đếm ngược từ X về 0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            text-align: center;
+            background: #f4f4f9;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            margin: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .timer {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+        .note {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>⏳ Đếm ngược từ X về 0</h2>
+    <label>Nhập số giây ban đầu (X):</label>
+    <input type="number" id="startSeconds" value="10" min="0" step="1">
+    <br>
+    <button id="startBtn">Bắt đầu đếm ngược</button>
+    <div class="timer" id="timerDisplay">0</div>
+    <div class="note">Thời gian sẽ tự động chạy ngược mỗi giây cho đến khi về 0.</div>
+</div>
+
+<script>
+    // Lấy các phần tử DOM
+    const startSecondsInput = document.getElementById('startSeconds');
+    const startBtn = document.getElementById('startBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    
+    let countdownInterval = null;   // lưu interval để dừng khi cần
+    let currentTime = 0;            // giá trị hiện tại của bộ đếm
+
+    // Hàm cập nhật hiển thị
+    function updateDisplay() {
+        timerDisplay.innerText = currentTime;
+    }
+
+    // Hàm dừng đếm ngược (clear interval)
+    function stopCountdown() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+    }
+
+    // Hàm bắt đầu đếm ngược từ giá trị `seconds`
+    function startCountdown(seconds) {
+        // Dừng bất kỳ đếm ngược nào đang chạy
+        stopCountdown();
+        
+        // Gán giá trị ban đầu
+        currentTime = seconds;
+        updateDisplay();
+        
+        // Nếu giá trị <= 0 thì không chạy
+        if (currentTime <= 0) {
+            timerDisplay.innerText = "0 (kết thúc)";
+            return;
+        }
+        
+        // Tạo interval mỗi giây
+        countdownInterval = setInterval(() => {
+            if (currentTime > 0) {
+                currentTime--;
+                updateDisplay();
+            }
+            
+            // Khi về 0 thì dừng interval
+            if (currentTime === 0) {
+                stopCountdown();
+                // Có thể thông báo kết thúc
+                timerDisplay.style.color = "green";
+                setTimeout(() => {
+                    timerDisplay.style.color = "#333";
+                }, 500);
+            }
+        }, 1000);
+    }
+
+    // Xử lý sự kiện click nút Bắt đầu
+    startBtn.addEventListener('click', () => {
+        let rawValue = parseInt(startSecondsInput.value, 10);
+        // Kiểm tra đầu vào hợp lệ
+        if (isNaN(rawValue)) rawValue = 0;
+        if (rawValue < 0) rawValue = 0;
+        
+        startCountdown(rawValue);
+    });
+
+    // Tùy chọn: tự động chạy ngay khi tải trang với giá trị mặc định (10 giây)
+    startCountdown(10);
+</script>
+</body>
+</html>

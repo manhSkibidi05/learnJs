@@ -1,0 +1,39 @@
+<!-- object là cấu trúc dữ liệu được lưu trữ dữ liệu dưới dạng key và value  
+- khai báo 1 đối tượng obj là chúng ta đang sử dụng biến cung cấp vùng nhớ cho 1 đối tượng mới và tham chiếu đến địa chỉ vùng nhớ của đối tượng
+- các thao tác cơ bản trên obj : thêm , sửa , xóa 1 thuộc tính(gồm key và value) của đối tượng 
+- các thao tác quan trọng của obj :
+    + kiểm tra 1 thuộc tính có là của đối tượng hay không : in operator -> kiểm tra thuộc tính có là của đối tượng hay không bao gồm cả thuộc tính được thừa kế
+        -> hasOwnProperty() : chỉ chấp nhận thuộc tính riêng của 1 đối tượng không tính các thuộc tính được thừa kế 
+    + duyệt qua toàn bộ các thuộc tính trong đối tượng : 
+        Cách 1 : duyệt trực tiếp các thuộc tính của đối tượng bằng for in -> khai báo 1 biến key duyệt từng key trong đối tượng 
+        Cách 2 : sử dụng các phương thức có sẵn của đối tượng chuyển các thuộc tính thành 1 mảng sau đó dùng forEach để duyệt qua mảng
+            -> Object.keys() : lấy các key của thuộc tính cho vào mảng -> chỉ cần thao tác trên key 
+            -> Object.values() : lấy các value của thuộc tính cho vào mảng -> chỉ cần thao tác với dữ liệu
+            -> Object.entries() : lấy cả key và value cho vào 1 mảng con rồi thêm vào 1 mảng lớn (mảng 2 chiều) -> thao tác cần cả key và value
+            -> sử dụng forEach duyệt mảng : forEach(function(currentValue , index ,arr){câu lệnh}) -> mỗi lần lặp lặp lại lệnh trong 1 hàm với 3 tham số trên , currentValue tham số bắt buộc lưu giá trị trong mảng
+    + sao chép 1 đối tượng :
+        - sao chép nông : chỉ sao chép được các thuộc tính mang dữ liệu primitive(nguyên thủy) thay đổi các dữ liệu này không ảnh hưởng đến obj gốc
+            -> sử dụng spread operator : objClone = {...objOriginal}
+        - sao chép sâu : sao chép được các thuộc tính mang dữ liệu arr/obj
+            -> sử dụng đệ quy : tự định nghĩa thông qua hàm sao chép tất cả dữ liệu bao gồm arr/obj 
+- các kiểu hàm trong đối tượng : hàm trong đối tượng dùng để thao tác đối với các dữ liệu được lưu trong đối tượng
+    -> Các lưu ý sử dụng hàm :
+        -> hàm sử dụng để làm 1 công việc duy nhất
+        -> có thể có tham số hoặc không 
+        -> khi return trả về dữ liệu phải cùng 1 kiểu dữ liệu trong 1 hàm 
+    - các kiểu khai báo hàm : 
+        -> tên_hàm(tham số){ câu lệnh } : khai báo hàm thông thường phổ biến 
+        -> tên_hàm : ()=>{câu lệnh} : khai báo arrow function -> hàm rút gọn 
+- từ khóa this của obj và cách hoạt động với các loại hàm 
+    -> từ khóa this sẽ tham chiếu đến đối tượng gọi nó lúc này từ khóa this đang ở vùng nhớ của obj đó có thể sử dụng các thuộc tính , phương thức trong pham vi của đối tượng
+    - hàm thông thường : this sẽ tham chiếu đến đối tượng gọi hàm 
+    - arrow function : this sẽ tham chiếu đến đối tượng nằm ngoài vòng scope của hàm -> muốn sử dụng this trong arrow function cần khai báo hàm thông thường bến ngoài và gọi this bên trong hàm thông thường đó -> lúc này this của arrow function sẽ tham chiếu đến đối tượng sử dụng this hàm thông thường
+- so sánh obj với arr : 
+    -> sử dụng obj khi mô tả 1 thực thể (đồ vật , con vật ...) 
+        + tra cứu dữ liệu nhanh thông qua key
+        + tự tạo các phương thức trong obj
+    -> sử dụng arr lưu trữ nhiều dữ liệu với 1 danh sách có thứ tự 
+        + sử dụng các thao tác với danh sách lọc , sắp xếp , tìm kiếm
+        + với nhiều các hàm khởi tạo sẵn áp dụng với arr 
+
+-->

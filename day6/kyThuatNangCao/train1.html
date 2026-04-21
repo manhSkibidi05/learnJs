@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-color:black;
+            color:white;
+            height: 2000px; /* tạo thanh cuộn để thử pageY */
+        }
+        h2{
+            color:red;
+        }
+        #info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: black;
+            color: white;
+            padding: 8px;
+            font-family: monospace;
+            z-index: 9999;
+        }
+        
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <form id="myForm" action="">
+        <label for="yourName">Your name : </label>
+        <input type="text" name="yourName" id="name">
+        <label for="yourAge">Your age : </label>
+        <input type="number" name="yourAge" id="age">
+        <label for="yourHobbit">Your hobbit : </label>
+        <input type="text" name="yourHobbit" id="hobbit">
+        <button  id="submit" type="submit">Submit your shyt</button>
+        <h2 id="mode">thay đổi trạng thái </h2>
+        <div id="info">Đang chờ click...</div>
+    </form>
+
+
+    <script>
+        // khởi tạo biến form gán bằng với form cần gửi đi
+        const form = document.getElementById('myForm');
+        // biến này gán bằng thẻ hiện thị -> cho biến được form đã được submit hay chưa 
+        const mode = document.getElementById(`mode`);
+        const button = document.getElementById(`submit`)
+
+        // hàm debounce -> hàm nhận 1 hàm khác cần debounce : khi gọi 1 hàm nhiều lần trong 1 khoảng thời gian chỉ nhận lần cuối gọi của hàm đó
+        function debounce(func, delay) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() =>{
+                    func.apply(this, args)
+                }
+                , delay);
+            };
+        }
+        // hàm này sẽ hiện thị cho biết thông tin việc hàm đã được gửi đi hay chưa
+        function submitForm(message) {
+            console.log('Form submitted!');
+            mode.innerHTML = `${message}`;
+            
+        }
+        // debounce hàm đó với thời gian sau khi submit là 1s
+        const debouncedSubmit = debounce(submitForm, 1000);
+
+        // lắng nghe sự kiện submit của form -> nếu submit diễn ra trong form này thực hiện hàm callback
+        form.addEventListener('submit', (event) =>{
+            // dừng thao tác thông thường của form sau khi được gửi là reset lại trang
+            event.preventDefault();  
+            // thực hiện debounce với hàm hiện thị thông tin 
+            debouncedSubmit(`form đã được submit`);
+        });
+
+        // bài tập 4 : Tạo hàm debounce cho input, chỉ gọi API sau khi người dùng ngừng gõ 500ms.
+
+        const name = document.getElementById(`name`);
+
+        function updateText(text){
+            mode.innerHTML = `${text}`;
+        }
+
+        const debounceText = debounce(updateText , 1000)
+
+        name.addEventListener(`input` , (event)=>{
+            debounceText(event.target.value);
+        });
+
+        // Bài tập 5 : tạo hàm throttle để log vị trí scroll mỗi 200ms
+
+        const toaDo = document.getElementById(`info`)
+        let time= 5;
+        
+        function throttle(func , timeout){
+            let co;
+            return function(...args){
+                if(!co){
+                    func.apply(this , args);
+                    co = true;
+                    updateTime(time);
+                    setTimeout(()=>{
+                        co = false
+                    },timeout);
+                }
+            }
+        }
+
+        function updateToaDo(x , y){
+            info.innerHTML = `tọa độ X : ${x} và tọa độ Y : ${y}`;
+        }
+
+        const updateMoi1giay = throttle(updateToaDo , 5000)
+
+        
+        document.addEventListener(`click` , (event)=>{
+            
+            updateMoi1giay(event.clientX , event.clientY);
+        })
+
+        
+        function updateTime(time){
+            const idInterval = setInterval(()=>{
+            if(time > 0){
+                time-=1;
+                info.innerHTML = `đang chờ ${time}s...`;
+            }else{
+                clearInterval(idInterval);
+            }
+            },1000);
+        }   
+        
+        
+
+    
+
+
+    </script>
+</body>
+</html>
