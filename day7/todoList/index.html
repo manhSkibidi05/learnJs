@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/output.css">
+    <title>Todo List</title>
+</head>
+<body class="bg-gray-500 flex justify-center">
+    <main class="w-2/3 text-black/80 bg-white rounded-md p-5  mt-5 shadow-xl/20">
+        <h1 class="text-center font-semibold text-3xl">Quản lý công việc</h1>
+
+        <!-- chức năng tổng hợp task-->
+        <div class="total mt-5">
+            <ul class="flex justify-between bg-gray-100 p-2 rounded-md">
+                <li class="total-list">Tổng : 0</li>
+                <li class="total-list-done">Hoàn thành : 0</li>
+                <li class="total-list-wait">Chưa làm : 0</li>
+            </ul>
+        </div>
+
+        <!-- chức năng tìm kiếm task -->
+        <div class="search mt-5 ">
+            <input class="search-input p-1 outline-0 w-full border border-gray-400 rounded-md focus:border-red-200" type="text" name="" id="" placeholder="Tìm kiếm công việc...">
+        </div>
+
+        <!-- chức năng phân loại task-->
+        <div class="filter mt-5 grid grid-cols-3 gap-2">
+            <button type="button" class="filter-all p-1 rounded-md cursor-pointer bg-red-200">Tất cả</button>
+            <button type="button" class="filter-done bg-gray-100 p-1 rounded-md cursor-pointer">Hoàn thành</button>
+            <button type="button" class="filter-wait bg-gray-100 p-1 rounded-md cursor-pointer">Chưa làm</button>
+        </div>
+
+        <!-- chức năng thêm mới task-->
+        <div class="add mt-5 grid grid-cols-4 gap-2">
+            <input class="add-input col-span-3 p-1 outline-0 border border-gray-400 rounded-md focus:border-red-200" type="text" name="" id="" placeholder="Nhập công việc mới...">
+            <button type="button" class="add-button bg-red-200 rounded-md cursor-pointer">Thêm</button>
+        </div>
+
+        <!-- chức năng hiện thị và cập nhật trạng thái task -->
+        <div class="show mt-5">
+            <div class="show-task flex justify-between border-b border-gray-400 items-center mb-3">
+                <div class="flex gap-2">
+                    <input class="show-task-remote" type="checkbox" name="" id="">
+                    <p class="show-task-text">dự báo thời tiết hôm nay mưa</p>
+                </div>
+                <button type="button" class="show-task-remove bg-red-200 px-3 py-1 rounded-md mb-1 cursor-pointer">Xóa</button>
+            </div>
+        </div>
+        <script src="main.js"></script>
+    </main>
+</body>
+</html>

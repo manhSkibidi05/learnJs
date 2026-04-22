@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List nâng cao</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Quản lý công việc</h1>
+        
+        <div class="stats">
+            <div>Tổng: <span id="totalCount">0</span></div>
+            <div>✅ Hoàn thành: <span id="completedCount">0</span></div>
+            <div>⏳ Chưa làm: <span id="pendingCount">0</span></div>
+        </div>
+
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm công việc...">
+        </div>
+
+        <div class="filter-section">
+            <button data-filter="all" class="active">Tất cả</button>
+            <button data-filter="completed">Hoàn thành</button>
+            <button data-filter="pending">Chưa làm</button>
+        </div>
+
+        <div class="add-section">
+            <input type="text" id="todoInput" placeholder="Nhập công việc mới...">
+            <button id="addBtn">➕ Thêm</button>
+        </div>
+
+        <ul id="todoList"></ul>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
