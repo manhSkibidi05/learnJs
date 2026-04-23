@@ -1,6 +1,4 @@
 let tasks = [];
-let tasksDone = [];
-let tasksWait = [];
 
 // chức năng thêm mới task
 const addInput = document.querySelector(`.add-input`);
@@ -8,16 +6,12 @@ const addButton = document.querySelector(`.add-button`);
 
 function addNewTask(task){
     tasks.push(task);
-    tasksWait.push(task);
-    showAllTask(task);
-    filterAll(tasks);
-    filterWait(tasksWait);
 }   
 
 // chức năng hiển thị và cập nhật trạng thái task  
 const show = document.querySelector(`.show`);
 
-function showAllTask(task){
+function createNewTask(task){
     // tạo cấu trúc hiện thị 1 task
     const taskDiv = document.createElement(`div`);
     taskDiv.className = 'show-task flex justify-between border-b border-gray-400 items-center mb-3';
@@ -28,10 +22,11 @@ function showAllTask(task){
     const checkBox = document.createElement(`input`);
     checkBox.className = `show-task-remote`;
     checkBox.type = `checkbox`;
+    checkBox.checked = task[`completed`];
 
     const para = document.createElement(`p`);
     para.className = `show-task-text`
-    para.textContent = task;
+    para.textContent = task[`content`];
 
     taskDivChild.appendChild(checkBox);
     taskDivChild.appendChild(para);
@@ -47,30 +42,40 @@ function showAllTask(task){
     // thêm sự kiện cho task
     checkBox.addEventListener(`change` , ()=>{
         if(checkBox.checked){
-            tasksDone.push(task);
-            tasksWait.pop(task);
+            task[`completed`] = true;
             para.classList.add(`line-through`);
-        } else{
-            tasksWait.push(task);
-            tasksDone.pop(task);
+        }else{
+            task[`completed`] = false;
             para.classList.remove(`line-through`);
         }
-        filterDone(tasksDone);
-        filterWait(tasksWait);
+        totalTasks(tasks);
     })
 
+    // thêm sự kiện cho button xóa -> khi click sẽ xóa task mà nó đang ở -> xóa chính mình 
+    buttonRemove.addEventListener(`click` , ()=>{
+        let index = tasks.findIndex(value=>value[`content`] == task[`content`]);
+        if(index >= 0){
+            tasks.splice(index , 1);
+        }
+        totalTasks(tasks);
 
-
-
+        taskDiv.classList.add(`hidden`);
+    })
 
     show.appendChild(taskDiv);
 }
 
 addButton.addEventListener(`click` , ()=>{
-    let task = addInput.value
-    addNewTask(task);
+    let task = {
+        content : addInput.value,
+        completed : false
+    };
     addInput.value = ``;
     
+    addNewTask(task);
+    createNewTask(task);
+
+    totalTasks(tasks);
 });
 
 // chức năng tổng hợp task
@@ -78,31 +83,30 @@ let totalList = document.querySelector(`.total-list`);
 let totalListDone = document.querySelector(`.total-list-done`);
 let totalListWait = document.querySelector(`.total-list-wait`);
 
-function filterAll(tasks){
-    let count = 0;
+function totalTasks(tasks){
+    let count1 = 0;
+    let count2 = 0;
+    let count3 = 0;
     for(let task of tasks){
-        count++;
+        if(task[`completed`] === true){
+            count2++;
+        }else{
+            count3++;
+        }
+        count1++;
     }
-    totalList.textContent = `Tổng : ${count}`;
-}
-
-function filterDone(tasks){
-    let count = 0;
-    for(let task of tasks){
-        count++;
-    }
-    totalListDone.textContent = `Hoàn thành : ${count}`;
-}
-
-function filterWait(tasks){
-    let count = 0;
-    for(let task of tasks){
-        count++;
-    }
-    totalListWait.textContent = `Chưa làm : ${count}`;
+    totalList.textContent = `Tổng : ${count1}`;
+    totalListDone.textContent = `Hoàn thành : ${count2}`;
+    totalListWait.textContent = `Chưa làm : ${count3}`;
 }
 
 
+// chức năng phân loại task 
+let filterBtnAll = document.querySelector(`.filter-all`);
+let filterBtnDone = document.querySelector(`.filter-done`);
+let filterBtnWait = document.querySelector(`.filter-wait`);
+let tasksCompleted = tasks.filter(value=> value[`completed`] === true);
+let tasksUnCompleted = tasks.filter(value=> value[`completed`] === false);
 
 
 
