@@ -6,6 +6,8 @@ const addButton = document.querySelector(`.add-button`);
 
 function addNewTask(task){
     tasks.push(task);
+    let tasksStr = JSON.stringify(tasks);
+    localStorage.setItem(`tasks` , tasksStr);
 }   
 
 // chức năng hiển thị và cập nhật trạng thái task  
@@ -48,15 +50,19 @@ function createNewTask(task){
             task[`completed`] = false;
             para.classList.remove(`line-through`);
         }
+        let tasksStr = JSON.stringify(tasks);
+        localStorage.setItem(`tasks` , tasksStr);
         totalTasks(tasks);
     })
 
     // thêm sự kiện cho button xóa -> khi click sẽ xóa task mà nó đang ở -> xóa chính mình 
     buttonRemove.addEventListener(`click` , ()=>{
-        let index = tasks.findIndex(value=>value[`content`] == task[`content`]);
+        let index = tasks.findIndex(value=>value[`id`] == task[`id`]);
         if(index >= 0){
             tasks.splice(index , 1);
         }
+        let tasksStr = JSON.stringify(tasks);
+        localStorage.setItem(`tasks` , tasksStr);
         totalTasks(tasks);
 
         taskDiv.remove();
@@ -65,9 +71,17 @@ function createNewTask(task){
     show.appendChild(taskDiv);
 }
 
+let valueStr = localStorage.getItem(`tasks`);
+tasks = JSON.parse(valueStr);
+
+for(let task of tasks){
+    createNewTask(task);
+}
+
 addButton.addEventListener(`click` , ()=>{
     if(addInput.value){
         let task = {
+        id : new Date().getTime(),
         content : addInput.value,
         completed : false
         };
@@ -81,6 +95,7 @@ addButton.addEventListener(`click` , ()=>{
 
     
 });
+
 
 // chức năng tổng hợp task
 let totalList = document.querySelector(`.total-list`);
@@ -103,7 +118,7 @@ function totalTasks(tasks){
     totalListDone.textContent = `Hoàn thành : ${count2}`;
     totalListWait.textContent = `Chưa làm : ${count3}`;
 }
-
+totalTasks(tasks);
 
 // chức năng phân loại task 
 let filterBtnAll = document.querySelector(`.filter-all`);
@@ -171,18 +186,19 @@ const searchWarning = document.querySelector(`.search-warning`);
 
 function searchTask(string){
     let textTasks = document.querySelectorAll(`.show-task-text`);
+
     if(!string){
         searchWarning.textContent = `không tồn tại`;
+        return;
     }else{
         searchWarning.textContent = ``;
     }
-    for(let char of string){
-        for(let task of textTasks){
-            if(task.textContent.indexOf(char) >= 0){
-                task.closest(`.show-task`).classList.remove(`hidden`);
-            }else{
-                task.closest(`.show-task`).classList.add(`hidden`);
-            }
+
+    for(let task of textTasks){
+        if(task.textContent.indexOf(string) >= 0){
+            task.closest(`.show-task`).classList.remove(`hidden`);
+        }else{
+            task.closest(`.show-task`).classList.add(`hidden`);
         }
     }
 }
@@ -200,7 +216,5 @@ function debounce(func , timeout){
 const debounceSearch = debounce(searchTask , 500);
 
 searchInput.addEventListener(`input` , ()=>{
-    let valueInput = searchInput.value;
-    debounceSearch(valueInput);
+    debounceSearch(searchInput.value);
 })
-
