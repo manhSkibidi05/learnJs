@@ -25,6 +25,14 @@ function getFilteredTasks(){
 // 3. tạo hàm render vẽ lại toàn bộ giao diện -> dựa trên những thay đổi của state sẽ cập nhật lại danh sách hiện thị trên giao diện 
 
 function render(){
+    const totalAll = tasks.length;
+    const totalDone = tasks.filter(task => task[`completed`]).length;
+    const totalWait = tasks.filter(task => !task[`completed`]).length;
+    
+    const totalList = document.querySelector(`.total-list`).textContent = `Tổng : ${totalAll}`;
+    const totalListDone = document.querySelector(`.total-list-done`).textContent = `Hoàn thành : ${totalDone}`;
+    const totalListWait = document.querySelector(`.total-list-wait`).textContent = `Chưa làm : ${totalWait}` ;
+
     const show = document.querySelector(`.show`);
     show.innerHTML = ``;
 
@@ -133,6 +141,7 @@ const btnAdd = document.querySelector(`.add-button`);
 
 btnAdd.addEventListener(`click` , ()=>{
     addNewTask(inputAdd.value);
+    inputAdd.value = ``;
 })
 
 const btnFilterAll = document.querySelector(`.filter-all`);
@@ -152,11 +161,23 @@ btnFilterWait.addEventListener(`click` , ()=>{
 })
 
 const searchInput = document.querySelector(`.search-input`);
-// const searchWarning = document.querySelector(`.search-warning`);
+
+function debounce(func , timeouts){
+    let timeoutId;
+    return function(...args){
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(()=>{
+            func.apply(this , args);
+        },timeouts)
+    }
+}
+
+const debounceSearch = debounce(setSearch , 500);
 
 searchInput.addEventListener(`input` , ()=>{
-    setSearch(searchInput.value);
+    debounceSearch(searchInput.value);
 })
+
 
 // 7. thêm localStorage -> khi thay đổi dữ liệu state và làm thay đổi giao diện thì cập nhật lại localStorage lưu trữ lại những dữ liệu thay đổi khi reload lại trang 
 // không mất dữ liệu đã lưu trước đó
