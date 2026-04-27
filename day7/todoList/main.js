@@ -44,10 +44,10 @@ function createNewTask(task){
     // thêm sự kiện cho task
     checkBox.addEventListener(`change` , ()=>{
         if(checkBox.checked){
-            task[`completed`] = true;
+            task.completed = true;
             para.classList.add(`line-through`);
         }else{
-            task[`completed`] = false;
+            task.completed = false;
             para.classList.remove(`line-through`);
         }
         let tasksStr = JSON.stringify(tasks);

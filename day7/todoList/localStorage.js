@@ -51,3 +51,43 @@
     // 5. lưu ý 
     // + không lưu thông tin nhạy cảm (mật khẩu , token..) -> localStorage có thể bị đọc qua Js
     // + dữ liệu không dc mã hóa -> lưu dưới dạng plain text
+
+    // review về localStorage 
+
+    // - localStorage : là nơi lưu trữ dữ liệu của trang web mỗi dữ liệu được lưu thành kiểu key và value trong đó value chỉ có thể dưới dạng string (chuỗi)
+
+    // - các phương thức của localStorage : 
+        // + thêm hay sửa giá trị của 1 dữ liệu :
+        localStorage.setItem(`key` , `value1`);
+        // + xóa 1 dữ liệu thông qua key :
+        localStorage.removeItem(`key`);
+        // + xóa toàn bộ dữ liệu trong localStorage
+        localStorage.clear();
+        // + lấy giá trị của 1 dữ liệu thông qua key 
+        localStorage.getItem(`key`);
+        // + trả về số lượng dữ liệu trong localStorage
+        localStorage.length ;
+
+    // - sử dụng localStorage khi : 
+        // + điểm lợi : + dữ liệu không biến mất sau khi reload trang 
+            // + giá trị lưu trữ có thể là obj/arr thông qua chuyển đổi dữ liệu 
+        // + hạn chế : + dữ liệu có thể đọc bởi người dùng vì dữ liệu đưới dạng text -> dễ dàng bị tấn công 
+            // + chỉ lưu trữ dữ liệu nhỏ 
+
+    // - chuyển đổi dữ liệu arr/obj sang string để lưu trữ dưới dạng JSON
+    let arrLocal = [1,2,3,4,5];
+    let objLocal = {name : `moy`};
+
+    let arrJson = JSON.stringify(arrLocal);
+    let objJson = JSON.stringify(objLocal);
+
+    // -> phương thức stringify() giúp chuyển đổi dữ liệu dạng mảng và obj sang dạng chuỗi 
+
+    localStorage.setItem(`arr` , arrJson);
+    
+    let arrAgain = JSON.parse(arrJson);
+
+    // -> sau đó có thể thêm dữ liệu mới vào localStorage với dữ liệu JSON 
+    // -> có thể chuyển đổi lại từ JSON sang obj dùng phương thức parse() 
+
+        
