@@ -1,232 +1,241 @@
+//  1 . các state cần quản lý -> state là các dữ liệu làm thay đổi giao diện : khi thay đổi các dữ liệu này sẽ làm thay đổi giao diện hiện thị 
+
+// - làm 1 app web chuẩn react -> chuyển từ state sang render : tất cả những thay đổi về giao diện lúc này sẽ đều ở trong render 
+// -> khi 1 hoặc nhiều sự kiện diễn ra làm thay đổi các phần tử state dựa vào những phần tử này để gọi render cập nhật giao diện sau khi sự kiện diễn ra 
+// -> tất cả sự kiện làm thay đổi giao diện đều phải gọi render và render giúp cập nhật giao diện dựa trên những sự kiện đó
+
+// các phần tử state : nếu các phần tử này thay đổi sẽ ảnh hưởng tới giao diện 
+// - tasks -> danh sách task 
 let tasks = [];
+// - currentFilter -> hiện thị các task được lọc 
+let currentFilter = `all`;
+// - currentSearch -> hiện thị các task phù hợp với điều kiện tìm kiếm
+let currentSearch = ``;
 
-// chức năng thêm mới task
-const addInput = document.querySelector(`.add-input`);
-const addButton = document.querySelector(`.add-button`);
+// 2 . tạo hàm lấy danh sách sau khi lọc -> sau khi các dữ liệu thay đổi sẽ khởi tạo lại danh sách mới hiện thị lên giao diện 
 
-// với chức năng thêm task mới 
-function addNewTask(task){
-    // sau khi thêm task mới vào mảng
-    tasks.push(task);
-    // chuyển đổi mảng hiện tại thành JSON
-    let tasksStr = JSON.stringify(tasks);
-    // chỉnh sửa lại dữ liệu được lưu trong localStorage
-    localStorage.setItem(`tasks` , tasksStr);
-}   
+// hàm này sẽ giúp lấy ra danh sách list cần hiện thị giữa trên những thay đổi của phần tử state
+function getFilteredTasks(){
+    // cập nhật lại ds task
+    let filtered = [...tasks];
 
-// chức năng hiển thị và cập nhật trạng thái task  
-const show = document.querySelector(`.show`);
-
-function createNewTask(task){
-    // tạo cấu trúc hiện thị 1 task
-    const taskDiv = document.createElement(`div`);
-    taskDiv.className = 'show-task flex justify-between border-b border-gray-400 items-center mb-3';
-
-    const taskDivChild = document.createElement(`div`);
-    taskDivChild.className = `flex gap-2`;
-
-    const checkBox = document.createElement(`input`);
-    checkBox.className = `show-task-remote`;
-    checkBox.type = `checkbox`;
-    checkBox.checked = task[`completed`];
-
-    const para = document.createElement(`p`);
-    para.className = `show-task-text`
-    para.textContent = task[`content`];
-
-    taskDivChild.appendChild(checkBox);
-    taskDivChild.appendChild(para);
-
-    const buttonRemove = document.createElement(`button`);
-    buttonRemove.className = `show-task-remove bg-red-200 px-3 py-1 rounded-md mb-1 cursor-pointer`;
-    buttonRemove.textContent = `Xóa`;
-    buttonRemove.type = `button`;
-
-    taskDiv.appendChild(taskDivChild);
-    taskDiv.appendChild(buttonRemove);
-
-    // thêm sự kiện cho task
-    checkBox.addEventListener(`change` , ()=>{
-        if(checkBox.checked){
-            task[`completed`] = true;
-            para.classList.add(`line-through`);
-        }else{
-            task[`completed`] = false;
-            para.classList.remove(`line-through`);
-        }
-        // khi thay đổi thuộc tính trong dữ liệu của mảng-> chuyển đổi sang JSON và cập nhật lại dữ liệu trong localStorage
-        let tasksStr = JSON.stringify(tasks);
-        localStorage.setItem(`tasks` , tasksStr);
-        totalTasks(tasks);
-    })
-
-    // thêm sự kiện cho button xóa -> khi click sẽ xóa task mà nó đang ở -> xóa chính mình 
-    buttonRemove.addEventListener(`click` , ()=>{
-        let index = tasks.findIndex(value=>value[`id`] == task[`id`]);
-        if(index >= 0){
-            tasks.splice(index , 1);
-        }
-        // khi xóa dữ liệu trong 1 mảng -> chuyển đổi sang JSON rồi cập nhật lại dữ liệu trong localStorage
-        let tasksStr = JSON.stringify(tasks);
-        localStorage.setItem(`tasks` , tasksStr);
-        totalTasks(tasks);
-
-        taskDiv.remove();
-    })
-
-    show.appendChild(taskDiv);
-}
-
-// khi mới khởi tạo ứng dụng -> lấy dữ liệu đã được lưu trước ở localStorage
-
-let valueStr = localStorage.getItem(`tasks`);
-// gán các dữ liệu mới chuyển đổi vào mảng lưu trữ trong file này 
-tasks = JSON.parse(valueStr);
-// - chuyển đổi sang kiểu obj rồi hiện thị các dữ liệu có sẵn trên màn hình 
-for(let task of tasks){
-    // duyệt từng phần tử trong mảng để tạo ra cacs task hiện thị lên màn hình người dùng 
-    createNewTask(task);
-}
-
-addButton.addEventListener(`click` , ()=>{
-    if(addInput.value){
-        let task = {
-        // thêm thuộc tính mới cho task id -> id = getTime() của obj Date vì lúc này cho ra chuỗi số khác nhau giúp mỗi task khác nhau  
-        id : new Date().getTime(),
-        content : addInput.value,
-        completed : false
-        };
-        
-        addNewTask(task);
-        createNewTask(task);
-
-        totalTasks(tasks);
+    // kiểm tra trường hợp lọc
+    if(currentFilter === `done`){
+        filtered = filtered.filter(task => task.completed === true)
+    }else if(currentFilter === `wait`){
+        filtered = filtered.filter(task => task.completed === false)
     }
-    addInput.value = ``;
 
+    // kiểm tra trường hợp tìm kiếm 
+    if(currentSearch.trim() !== ``){
+        currentSearch = currentSearch.trim().toLowerCase();
+        filtered = filtered.filter(task => task.content.toLowerCase().includes(currentSearch));
+    }
+
+    // trả về danh sách sau khi đi qua tất cả điều kiện 
+    return filtered;
+}
+
+// 3. tạo hàm render vẽ lại toàn bộ giao diện -> dựa trên những thay đổi của state sẽ cập nhật lại danh sách hiện thị trên giao diện 
+
+// - hàm render : mọi thay đổi giao diện đều ở trong render()
+function render(){
+    // thay đổi về tổng số task hiện thị mỗi lầ thêm/xóa...
+    const totalAll = tasks.length;
+    const totalDone = tasks.filter(task => task[`completed`]).length;
+    const totalWait = tasks.filter(task => !task[`completed`]).length;
     
-});
+    const totalList = document.querySelector(`.total-list`).textContent = `Tổng : ${totalAll}`;
+    const totalListDone = document.querySelector(`.total-list-done`).textContent = `Hoàn thành : ${totalDone}`;
+    const totalListWait = document.querySelector(`.total-list-wait`).textContent = `Chưa làm : ${totalWait}` ;
 
+    // thay đổi về các task sẽ hiện thị : 
+    // + cập nhật lại phần tử show xóa toàn bộ phần tử cũ (task) hiện thị cũ 
+    const show = document.querySelector(`.show`);
+    show.innerHTML = ``;
 
-// chức năng tổng hợp task
-let totalList = document.querySelector(`.total-list`);
-let totalListDone = document.querySelector(`.total-list-done`);
-let totalListWait = document.querySelector(`.total-list-wait`);
+    // + cập nhật với danh sách task cần hiện thị 
+    tasksUpdate = getFilteredTasks();
 
-function totalTasks(tasks){
-    let count1 = 0;
-    let count2 = 0;
-    let count3 = 0;
-    for(let task of tasks){
-        if(task[`completed`] === true){
-            count2++;
-        }else{
-            count3++;
-        }
-        count1++;
-    }
-    totalList.textContent = `Tổng : ${count1}`;
-    totalListDone.textContent = `Hoàn thành : ${count2}`;
-    totalListWait.textContent = `Chưa làm : ${count3}`;
-}
-// gọi luôn chức năng vì mới vào trang sẽ lấy dữ liệu từ localStorage -> nên cập nhật luôn số lượng các task
-totalTasks(tasks);
+    // + kiểm tra trường hợp rỗng : 1. rỗng khi xóa hết task 2. rỗng khi dữ liệu tìm kiếm không hợp lệ 
+    if(tasksUpdate.length === 0){
+        // -> nếu rỗng hiện thị chữ khum có task 
+        let smallText = document.createElement(`small`);
+        smallText.className =`text-red-500`;
+        smallText.textContent = `Khum có task nào ở đây cả !`;
 
-// chức năng phân loại task 
-let filterBtnAll = document.querySelector(`.filter-all`);
-let filterBtnDone = document.querySelector(`.filter-done`);
-let filterBtnWait = document.querySelector(`.filter-wait`);
+        show.appendChild(smallText);
 
-function updateTask(){
-    let tasksShow = document.querySelectorAll(`.show-task-remote`);
-    tasksShow.forEach(task=>{
-        task.closest(`.show-task`).classList.remove(`hidden`);
-    })
-}
-
-function updateTaskDone(){
-    let tasksShow = document.querySelectorAll(`.show-task-remote`);
-    tasksShow.forEach(task =>{
-        if(!task.checked){
-            task.closest(`.show-task`).classList.add(`hidden`);
-        }else{
-            task.closest(`.show-task`).classList.remove(`hidden`);
-        }
-    })
-}
-
-function updateTaskWait(){
-    let tasksShow = document.querySelectorAll(`.show-task-remote`);
-    tasksShow.forEach(task =>{
-        if(task.checked){
-            task.closest(`.show-task`).classList.add(`hidden`);
-        }else{
-            task.closest(`.show-task`).classList.remove(`hidden`);
-        }
-    })
-}
-filterBtnAll.addEventListener(`click` , ()=>{
-    updateTask();
-    if(!filterBtnAll.classList.contains(`bg-red-200`)){
-        filterBtnAll.classList.add(`bg-red-200`);
-        filterBtnDone.classList.remove(`bg-red-200`);
-        filterBtnWait.classList.remove(`bg-red-200`);
-    }
-});
-
-filterBtnDone.addEventListener(`click` , ()=>{
-    updateTaskDone();
-    if(!filterBtnDone.classList.contains(`bg-red-200`)){
-        filterBtnDone.classList.add(`bg-red-200`);
-        filterBtnAll.classList.remove(`bg-red-200`);
-        filterBtnWait.classList.remove(`bg-red-200`);
-    }
-});
-
-filterBtnWait.addEventListener(`click` , ()=>{
-    updateTaskWait();
-    if(!filterBtnWait.classList.contains(`bg-red-200`)){
-        filterBtnWait.classList.add(`bg-red-200`);
-        filterBtnDone.classList.remove(`bg-red-200`);
-        filterBtnAll.classList.remove(`bg-red-200`);
-    }
-});
-
-// chức năng tìm kiếm 
-const searchInput = document.querySelector(`.search-input`);
-const searchWarning = document.querySelector(`.search-warning`);
-
-function searchTask(string){
-    let textTasks = document.querySelectorAll(`.show-task-text`);
-
-    if(!string){
-        searchWarning.textContent = `không tồn tại`;
         return;
+    }
+
+    // + hiện thị task trong danh sách các task cần hiện thị 
+    for(let task of tasksUpdate){
+        // tạo task mới dựa trên dữ liệu trong danh sách 
+        let elementTask = createElementTask(task);
+        // thêm task con vào show
+        show.appendChild(elementTask);
+    }
+
+    // + lưu những thay đổi vào localStorage -> vì mỗi lần gọi render đều là ảnh hưởng tới dữ liệu nên cần cập nhật lại dữ liệu đó vào localStorage tránh không đồng bộ
+    saveToLocalStorage();
+}
+
+// 4. tách riêng hàm createElementTask(task) để tạo 1 task dom -> dựa vào danh sách được cập nhật tùy vào số lượng task cần hiện thị sẽ tạo số task dom tương ứng
+
+// + hàm tạo ra phần tử task mới hiện thị 
+function createElementTask(task){
+    let showTask = document.createElement(`div`);
+    showTask.className = `show-task flex justify-between border-b border-gray-400 items-center mb-3`;
+    
+    let showTaskChild = document.createElement(`div`);
+    showTaskChild.className = `flex gap-2`;
+
+    let inputCheckbox = document.createElement(`input`);
+    inputCheckbox.type = `checkbox`;
+    inputCheckbox.className = `show-task-remote`;
+    inputCheckbox.checked = task.completed;
+
+    let contentTask = document.createElement(`p`);
+    contentTask.className = `show-task-text`;
+    contentTask.textContent = task.content;
+
+    showTaskChild.appendChild(inputCheckbox);
+    showTaskChild.appendChild(contentTask);
+
+    let btnRemove = document.createElement(`button`);
+    btnRemove.type = `button`;
+    btnRemove.className = `show-task-remove bg-red-200 px-3 py-1 rounded-md mb-1 cursor-pointer`;
+    btnRemove.textContent = `Xóa`;
+
+    // 2 sự kiện thay đổi phần tử state được tạo hàm riêng và truyền vào id của task nhận sự kiện đó
+    inputCheckbox.addEventListener(`change` , ()=>{
+        changeTaskCompleted(task.id);
+    })
+
+    btnRemove.addEventListener(`click`, ()=>{
+        removeTask(task.id);
+    })
+
+    showTask.appendChild(showTaskChild);
+    showTask.appendChild(btnRemove);
+
+    return showTask;
+}
+
+// 5. cập nhật các hàm làm thay đổi state 
+// -> các hàm sẽ chạy khi sự kiện diễn ra làm thay đổi state và khi thay đổi state cần cập nhật danh sách hiện thị cuối cùng render lại giao diện
+
+// - các hàm này sẽ làm thay đổi phần tử state và chúng sẽ khởi chạy khi sự kiện diễn ra nên mỗi khi kết thúc hàm gọi render() để cập nhật giao diện 
+// + hàm thêm task
+function addNewTask(value){
+    let newTask = {
+        id : new Date().getTime(),
+        content : value,
+        completed : false
+    }
+    tasks.push(newTask);
+    render();
+}
+
+// + hàm xóa task
+function removeTask(id){
+    tasks = tasks.filter(task => task.id !== id);
+    render();
+}
+
+// + hàm thay đổi trạng thái của task 
+function changeTaskCompleted(id){
+    let task = tasks.find(task => task.id === id);
+    if(task.completed){
+        task.completed = false;
     }else{
-        searchWarning.textContent = ``;
+        task.completed = true;
     }
-
-    for(let task of textTasks){
-        if(task.textContent.indexOf(string) >= 0){
-            task.closest(`.show-task`).classList.remove(`hidden`);
-        }else{
-            task.closest(`.show-task`).classList.add(`hidden`);
-        }
-    }
+    render();
 }
 
-function debounce(func , timeout){
-    let idTimeout;
+// + hàm hiện thị task phù hợp vs điều kiện lọc
+function setFilter(filter){
+    currentFilter = filter;
+    render();
+}
+
+// + hàm hiện thị task phù hợp vs tìm kiếm 
+function setSearch(keyWord){
+    currentSearch = keyWord;
+    render();
+}
+
+// 6 . gán sự kiện cho các phần tử làm thay đổi state -> khi sự kiện diễn ra làm thay đổi state sẽ gọi các hàm thay đổi state phù hợp với từng sự kiện 
+
+// + các sự kiện xảy ra và gọi lại các hàm được định nghĩa trên sau đó gọi tiếp đến render() cập nhật giao diện thông qua sự kiện
+const inputAdd = document.querySelector(`.add-input`);
+const btnAdd = document.querySelector(`.add-button`);
+
+// + thêm task mới
+btnAdd.addEventListener(`click` , ()=>{
+    addNewTask(inputAdd.value);
+    inputAdd.value = ``;
+})
+
+const btnFilterAll = document.querySelector(`.filter-all`);
+const btnFilterDone = document.querySelector(`.filter-done`);
+const btnFilterWait = document.querySelector(`.filter-wait`);
+
+// + thay đổi điều kiện lọc 
+btnFilterAll.addEventListener(`click` , ()=>{
+    setFilter(`all`);
+})
+
+btnFilterDone.addEventListener(`click` , ()=>{
+    setFilter(`done`);
+})
+
+btnFilterWait.addEventListener(`click` , ()=>{
+    setFilter(`wait`);
+})
+
+const searchInput = document.querySelector(`.search-input`);
+
+function debounce(func , timeouts){
+    let timeoutId;
     return function(...args){
-        clearTimeout(idTimeout);
-        idTimeout = setTimeout(()=>{
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(()=>{
             func.apply(this , args);
-        },timeout)
+        },timeouts)
     }
 }
 
-const debounceSearch = debounce(searchTask , 500);
+const debounceSearch = debounce(setSearch , 500);
 
+// + debounce hàm tìm kiếm -> chỉ trả về giữ liệu cho hàm sau khi không còn hàm nào chạy trong 500ms
 searchInput.addEventListener(`input` , ()=>{
     debounceSearch(searchInput.value);
 })
+
+
+// 7. thêm localStorage -> khi thay đổi dữ liệu state và làm thay đổi giao diện thì cập nhật lại localStorage lưu trữ lại những dữ liệu thay đổi khi reload lại trang 
+// không mất dữ liệu đã lưu trước đó
+
+// + hàm này giúp cập nhật lại dữ liệu mỗi lần reload lại web -> dựa trên dữ liệu đó thì giao diện sẽ hiển thị giữ nguyên so với lần cuối sử dụng 
+function loadFromLocalStorage(){
+    let data = localStorage.getItem(`tasks`);
+    if(data){
+        tasks = JSON.parse(data);
+    }else{
+        tasks = [];
+    }
+}
+
+// + hàm này sẽ lưu lại những dữ liệu thay đổi  
+function saveToLocalStorage(){
+    let data = JSON.stringify(tasks);
+    localStorage.setItem(`tasks` , data);
+}
+
+// + gọi hàm này cập nhật lại dữ liệu -> thay đổi phần tử state
+loadFromLocalStorage();
+// + cập nhật lại giao diện dựa trên nó 
+render();
