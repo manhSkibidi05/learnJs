@@ -1,17 +1,14 @@
-function fetchUser(id) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const users = {
-                1: { id: 1, name: "An" },
-                2: { id: 2, name: "Bình" }
-            };
-            const user = users[id];
-            if (user) resolve(user);
-            else reject("User not found");
-        }, 1000);
-    });
-}
+const p = new Promise((resolve , reject)=>{
+            console.log(`1 . excutor chạy ngay`);
+            setTimeout(()=>{
+                console.log(`2 . sau 1 giây , resolve`);
+                resolve(`giá trị`);
+            },1000);
+        });
 
-fetchUser(2)
-    .then(user => console.log(user))   // thành công
-    .catch(err => console.error(err)); // thất bại
+        console.log(`3 . promise vừa tạo ${p}`);
+
+        p.then(value => {
+            console.log(`4 . nhận được ${value}`);
+            return `giá trị mới`;
+        }).then(newVal => console.log(`5. chuỗi then ${newVal}`));
