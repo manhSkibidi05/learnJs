@@ -138,3 +138,5 @@
 
     // - 2 phương thức resolve() và reject() nhận và giá trị bất kì -> tạo ngay 1 Promise với trạng thái fulfilled hoặc rejected mà không qua pending 
     // -> trả về kết quả ngay nên then và catch chạy ngay lập tức không cần chờ  
+
+// 6. Chuyển đổi callback sang Promise 

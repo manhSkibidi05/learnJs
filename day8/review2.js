@@ -85,3 +85,20 @@
         // - Ưu điểm sử dụng Promise để xử lí bất đồng bộ :
             // + gọi các Promise liên tục tạo thành chuỗi thông qua then() và catch() -> tránh callback hell
             // + xử lí nhiều thao tác tuần tự dễ đọc code 
+            // + có các phương thức tĩnh sẵn để sử dụng 
+
+                // Promise.all([]) : tham số là 1 mảng các Promise -> khi then() nhận kết quả là 1 mảng các Promise nếu tất cả là resolve thì chạy hàm callback của then
+                // nếu 1 Promise trong mảng là reject -> chạy callback trong catch() trả về cùng 1 lỗi 
+
+                // Promise.allSettled([]) : tham số là 1 mảng các Promise -> chạy tất cả các Promise trong then kể cả là resolve hay reject 
+
+                // Promise.race([]) : tham số là 1 mảng các Promise -> then chỉ nhận 1 Promise duy nhất chạy nhanh nhất resolve trả về sớm nhất nếu là reject cần catch
+                
+                // Promise.reject() và Promise.resolve() : 2 phương thức có tham số là 1 giá trị bất kì -> tạo ra luôn 1 Promise mang sẵn giá trị lấy ra bằng cách sử dụng
+                // then/catch
+
+        // - Fetch API : dữ liệu được lấy về sẽ được trả về là 1 Promise -> có thể xử lí dữ liệu đó then và catch
+                
+                
+
+        
