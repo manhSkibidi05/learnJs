@@ -139,4 +139,55 @@
     // - 2 phương thức resolve() và reject() nhận và giá trị bất kì -> tạo ngay 1 Promise với trạng thái fulfilled hoặc rejected mà không qua pending 
     // -> trả về kết quả ngay nên then và catch chạy ngay lập tức không cần chờ  
 
-// 6. Chuyển đổi callback sang Promise 
+// 6. Chuyển đổi callback sang Promise (Promisify)
+    // - khi bạn có 1 hàm cũ dùng callback (error-first pattern) , bạn có thể wrap nó thành Promise để sử dụng với .then/catch hoặc async/await
+
+    // 6.1 Hàm callback dạng error first
+
+    function readFileCallback(fileName , callback){
+        setTimeout(()=>{
+            if(fileName === `data.txt`) callback(null , `Nội dung file`);
+            else callback(`lỗi` , null);
+        },500)
+    }
+
+    // 6.2 Wrap thủ công 
+
+    function readFilePromise(fileName){
+        return new Promise((resolve , reject) => {
+            readFileCallback(fileName , (err , result) => {
+                if(err) reject(err);
+                else resolve(result);
+            })
+        })
+    }
+
+    readFilePromise(`data.txt`).then(result => console.log(result)).catch(error => console.log(error));
+
+    // 6.3 Hàm promisify tổng quát -> dùng cho bất kì hàm callback nào : sử dụng currying cho công thức tổng quát 
+
+    function promisify(fn){
+        return function(...args){
+            return new Promise((resolve , reject) => {
+                fn(...args , (err , result) =>{
+                    if(err) reject(err);
+                    else resolve(result);
+                });
+            });
+        };
+    }
+
+    // sử dụng 
+    const readFilePromiseGeneric = promisify(readFileCallback);
+    readFilePromiseGeneric(`data.txt`).then( result => console.log(result)).catch( error => console.log(error));
+
+    // 6.4 Promisify có sắn trong node.js (util.promisify)
+    // - Nếu bạn dùng Node.js , có thể dùng module util
+
+    const util = require(`util`);
+    const readFilePromise = util.promisify(readFileCallback);
+
+    // 6.5 Vd
+
+    
+

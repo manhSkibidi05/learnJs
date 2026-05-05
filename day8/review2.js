@@ -86,18 +86,32 @@
             // + gọi các Promise liên tục tạo thành chuỗi thông qua then() và catch() -> tránh callback hell
             // + xử lí nhiều thao tác tuần tự dễ đọc code 
             // + có các phương thức tĩnh sẵn để sử dụng 
+            // -> các phương thức này phù hợp cho việc xử lí nhiều Promise 1 lúc giúp tăng số lượng thao tác bất đồng bộ trong 1 lần gọi 
 
-                // Promise.all([]) : tham số là 1 mảng các Promise -> khi then() nhận kết quả là 1 mảng các Promise nếu tất cả là resolve thì chạy hàm callback của then
-                // nếu 1 Promise trong mảng là reject -> chạy callback trong catch() trả về cùng 1 lỗi 
+                // - Promise.all() : đầu vào nhận tham số là 1 mảng các Promise đang ở trạng thái pending -> đầu ra là 1 mảng các Promise reject/resolve sau khi mà then 
+                // nhận đầu ra đó nếu tất cả Promise đều resolve chạy hàm callback then nếu chỉ 1 Promise reject -> chạy hàm callback của catch
 
-                // Promise.allSettled([]) : tham số là 1 mảng các Promise -> chạy tất cả các Promise trong then kể cả là resolve hay reject 
+                // - Promise.allSetlled() : đầu vào nhận tham số là 1 mảng các Promise ở trạng thái pending, đầu ra là 1 mảng các Promise reject/resolve then nhận 
+                // kết quả trả về đó chạy tất cả các Promise có trong mảng kể cả resolve hay reject 
 
-                // Promise.race([]) : tham số là 1 mảng các Promise -> then chỉ nhận 1 Promise duy nhất chạy nhanh nhất resolve trả về sớm nhất nếu là reject cần catch
+                // - Promise.race() : đầu vào nhận tham số là 1 mảng các Promise ở trạng thái pending , đầu ra là 1 Promise ở trạng thái fulfilled/rejected 
+                // -> đây là Promise chạy nhanh nhất -> thời gian bất đồng bộ ít nhất 
+
+                // - Promise.resolve() và Promise.reject() : đầu vào là 1 tham số với giá trị bất kì , đầu ra là 1 Promise ở trạng thái fulfilled/rejected 
+                // -> tạo ngay 1 Promise mang sẵn giá trị 
+
+        // Fetch API đối với Promise 
+        // - Fetch(url) : là 1 hàm lấy dữ liệu từ 1 trang web thông qua đường dẫn url được truyền vào làm tham số của hàm -> kết quả trả về của hàm là 1 Promise của 1 đối
+        // tượng response 
+
+        // - Đối tượng response được khởi tạo khi lấy dữ liệu của trang web thông qua fetch -> là kết quả trả về thông qua hàm đó Promise của response
+
+        // - then nhận kết quả trả về của fetch đó -> chính là 1 đối tượng response :
+            // + lúc này response chỉ là phần header của trang web và chỉ mang trạng thái của trang web chưa chứa phần nội dụng
+            // + muốn lấy phần nội dung của web phải thông qua các phương thức của response : json() , text() , blob() 
+            // -> đây chính là thao tác bất đồng bộ vì phải tốn thời gian đọc trang web và chuyển đổi dữ liệu của nó sang dạng js có thể đọc được 
+            // + sau khi mà chuyển hóa dữ liệu đọc được lấy then để in dữ liệu và catch để bắt lỗi nếu có 
                 
-                // Promise.reject() và Promise.resolve() : 2 phương thức có tham số là 1 giá trị bất kì -> tạo ra luôn 1 Promise mang sẵn giá trị lấy ra bằng cách sử dụng
-                // then/catch
-
-        // - Fetch API : dữ liệu được lấy về sẽ được trả về là 1 Promise -> có thể xử lí dữ liệu đó then và catch
                 
                 
 

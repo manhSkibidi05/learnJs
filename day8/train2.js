@@ -68,11 +68,16 @@ fetch(`https://jsonplaceholder.typicode.com/users/1`)
 
 // Đề bài :  tải đồng thời 3 endpoints /users /posts /comments -> hiện thị số lượng bài viết trung bình trên mỗi user 
 
+// lấy dữ liệu từ trang web users 
 const users = fetch(`https://jsonplaceholder.typicode.com/users`)
+    // dựa vào fetch trả về 1 Promise của response
     .then(response => {
+        // kiểm tra response được lấy thành công chưa 
         if(!response.ok) throw new Error(`error : ${response.status}`);
+        // lấy dữ liệu của trang web rồi trả về 
         return response.json();
     });
+// -> users mang dữ liệu của trang web đó -> dữ liệu dưới dạng Promise resolve
 
 const posts = fetch(`https://jsonplaceholder.typicode.com/posts`)
     .then(response => {
@@ -86,10 +91,13 @@ const comments = fetch(`https://jsonplaceholder.typicode.com/comments`)
         return response.json();
     });
 
+// lấy cả 3 mảng dữ liệu Promise đó truyền vào làm tham số của all  
 Promise.all([users , posts , comments])
+    // dùng destructing nhận dữ liệu đó rồi chạy trong hàm callback  
     .then(([us , ps , cmts])=>{
         let result = ps.length / us.length;
         console.log(`số lượng bài viết trung bình của 1 user là : ${result} `);
     })
+    // nếu 1 trong 3 dữ liệu có throw lỗi sẽ catch bắt lấy và hủy chạy then 
     .catch(error => console.log(error));
 
