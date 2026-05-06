@@ -31,67 +31,150 @@
 // Mỗi lần thử lại cách nhau 1s -> trả về Promise 
 
     function fetchWithRetry(url , maxRetries){
-        let count = 1;
-        let result = null;
-        
-        function retry(){
-            if(count >= maxRetries){
-                return Promise.reject(`quá số lần quy định`);
-            } 
-            if(result){
-                return Promise.resolve(result);
+        return new Promise((resolve , reject) =>{
+            let count = 1;
+
+            function recursive(){
+                if(count > maxRetries) return reject(`Lỗi do kết nối thất bại ${maxRetries} lần`);
+                
+                fetch(url)
+                    .then(response => {
+                        if(!response.ok) throw new Error(`lỗi do ${response.status}`);
+                        else{
+                            return response.json();
+                        }
+                    })
+                    .then(result => resolve(result))
+                    .catch(error => {
+                        console.log(`kết nối thất bại lần thứ ${count} và ${error.message}`);
+                        count++;
+                        setTimeout(recursive , 1000);
+                    })
             } 
 
-            fetch(url).then(response => {
-                if(!response.ok){
-                    count++;
-                    throw new Error(`lỗi`);
-                }
-                    return response.json();
-            }).then(value => result = value).catch(error => setTimeout(()=>{retry()},1000));
-        }
-
-        retry();
+            recursive();
+        })
     }
     
-    console.log(fetchWithRetry(`https://jsonplaceholder.typicode.com/users/155` , 3))
-    
+    fetchWithRetry(`https://jsonplaceholder.typicode.com/users/12` , 3)
+        .then(result => console.log(result))
+        .catch(error => console.log(error))
 
-// AI 
+// Bài 10 : Promise chain với xử lý lỗi chi tiết 
 
-function fetchWithRetry(url, maxRetries) {
-    return new Promise((resolve, reject) => {
-        let attempt = 0; // Đếm số lần thử
+// Đề bài : giả sử có các hàm trả về Promise hàm 1 -> hàm 2 -> hàm 3 . nếu bất kì bước nào lỗi , in ra thông báo cụ thể 
 
-        function makeRequest() {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        // Status code không thành công (4xx, 5xx)
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json(); // hoặc response.text() tùy nhu cầu
-                })
-                .then(data => {
-                    resolve(data); // Thành công -> giải quyết Promise
-                })
-                .catch(error => {
-                    attempt++;
-                    console.log(`Attempt ${attempt} failed:`, error.message);
-                    if (attempt <= maxRetries) {
-                        // Còn lượt thử -> gọi lại sau 1 khoảng thời gian (tùy chọn)
-                        setTimeout(makeRequest, 1000 * attempt); // delay tăng dần
-                    } else {
-                        reject(new Error(`Failed after ${maxRetries} retries: ${error.message}`));
-                    }
-                });
+    const users = {
+        user1 : {
+            token : `abc`
+        },
+        user2 : {
+            token : `bbc`
+        },
+        user3 : {
+            token : `nan`
+        },
+    }
+
+    const profiles = {
+        bbcc : {
+            id : 1,
+            name : `long`,
+        },
+        bbc : {
+            id : 2,
+            name : `bằng`,
+        },
+        nan : {
+            id : 3,
+            name : `nhims`,
         }
+    }
 
-        makeRequest(); // Bắt đầu lần thử đầu tiên
+    const orders = {
+        1 : {
+            food : `bánh tráng`,
+            table : 1
+        },
+        5 : {
+            food : `bún bò huế`,
+            table : 5
+        },
+        3 : {
+            food : `phở bòa`,
+            table : 3
+        }
+    }
+
+
+    function authenticate(user){
+        return new Promise((resolve , reject) => {
+            setTimeout(() => {
+                if(users[user]) resolve(users[user][`token`]);
+                else reject(`wrong user`);
+            },1000);
+        })
+    }
+
+    function fetchProfile(token){
+        return new Promise((resolve , reject) => {
+            setTimeout(() => {
+                if(profiles[token]) resolve(profiles[token][`id`]);
+                else reject(`token is not available`);
+            },1000)
+        })
+    }
+    
+    function fetchOrders(profileId){
+        return new Promise((resolve , reject) => {
+            setTimeout(() => {
+                if(orders[profileId]) resolve(orders[profileId]);
+                else reject(`cant find profile id`);
+            },1000)
+        })
+    }
+    
+    authenticate(`user1`)
+        .then(token => fetchProfile(token))
+        .then(profileId => fetchOrders(profileId))
+        .then(order => console.log(order))
+        .catch(error => console.log(error))
+
+// Bài 11 : Promise.allSettled 
+
+// Đề bài : tạo 3 Promise -> dùng Promise.allSetlled và in ra từng kết quả (status , value/reason)
+
+    const p1 = new Promise((resolve , reject) => {
+        setTimeout(() => {
+            resolve(`OK1`)
+        },500)
     });
-}
+    
+    const p2 = new Promise((resolve , reject) => {
+        setTimeout(() => {
+            reject(`Error2`)
+        },300)
+    }); 
 
-// Sử dụng
-fetchWithRetry('https://jsonplaceholder.typicode.com/users/1', 3)
-    .then(user => console.log('Success:', user.name))
-    .catch(err => console.error('Final error:', err.message));
+    const p3 = new Promise((resolve , reject) => {
+        setTimeout(() => {
+            resolve(`OK3`)
+        },700)
+    }); 
+
+    Promise.allSettled([p1 , p2 , p3])
+        .then(results => {
+            results.forEach(result => {
+                if(result.status === `fulfilled`) console.log(`status : ${result.status} and value : ${result.value}`);
+                else console.log(`status : ${result.status} and reason : ${result.reason}`);
+            })
+        })
+    
+// Bài 12 : Tự viết hàm promiseAll (không dùng Promise.all) 
+
+// Đề bài : nhận 1 mảng các Promise -> trả về 1 Promise mới resolve là mảng các Promise trước đó nếu tất cả resolve nếu reject trả về reject đó 
+
+    function promiseAll(promises){
+        
+
+    }

@@ -112,7 +112,51 @@
             // -> đây chính là thao tác bất đồng bộ vì phải tốn thời gian đọc trang web và chuyển đổi dữ liệu của nó sang dạng js có thể đọc được 
             // + sau khi mà chuyển hóa dữ liệu đọc được lấy then để in dữ liệu và catch để bắt lỗi nếu có 
                 
-                
+        // hàm thử lại với Promise -> nếu qua số lần quy định sẽ lỗi
+        // với 2 tham số truyền vào : url (đường dẫn kết nối của fetch) , maxRetries (số lần thử tối đa)
+        function fetchWithRetry(url , maxRetries){
+            // hàm sẽ trả về 1 Promise -> nhận resolve nếu thành công và reject nếu thất bại 
+            return new Promise((resolve , reject) =>{
+                // tạo biến count bên ngoài hàm đệ quy -> đếm số lần thử do biến này có thể giữ cho kết quả do các hàm khác thay đổi dựa vào đặc tính closure của hàm
+                let count = 1;
+
+                // hàm đệ quy -> có thể gọi lại hàm này nếu xảy ra lỗi
+                function recursive(){
+                    // base case : kiểm tra số lần thử đã vượt qua giới hạn chưa -> nếu rồi hàm trả về reject cho Promise kết thúc hàm 
+                    if(count > maxRetries) return reject(`Lỗi do kết nối thất bại ${maxRetries} lần`);
+                    // kết nối đường dẫn bằng fetch
+                    fetch(url)
+                        // kết nối trả về Promise của response : là 1 đối tượng đại diện cho trang web đã kết nối đến
+                        .then(response => {
+                            // ban đầu chỉ kết nối phần header -> kiểm tra kết nối nếu không thành công ném ra lỗi cho catch
+                            if(!response.ok) throw new Error(`lỗi do ${response.status}`);
+                            else{
+                                // nếu thành công -> lấy dữ liệu phần thân của web bằng các phương thức đọc và parse dữ liệu tùy vào loại dữ liệu json() , text() , blob()
+                                return response.json();
+                            }
+                        })
+                        // nếu kết nỗi thành công -> then sẽ bắt và trả về resolve(giá trị vừa được lấy) kết thúc hàm 
+                        .then(result => resolve(result))
+                        .catch(error => {
+                            // kết nối thất bại -> in ra số lần thử và lỗi của kết nối
+                            console.log(`kết nối thất bại lần thứ ${count} và ${error.message}`);
+                            // tăng biến đếm số lần thử
+                            count++;
+                            // setTimeout -> đưa hàm đệ quy thử lại , sau 1s hàm recursive sẽ được gọi lại nên 
+                            // setTimeout có 2 tham số : địa chỉ của hàm và thời gian bất đồng bộ 
+                            // lúc này setTimeout tham chiếu tới địa chỉ của hàm và sau thời gian quy định -> hàm sẽ chạy  
+                            setTimeout(recursive , 1000);
+                        })
+                } 
+                // gọi hàm lần đầu 
+                recursive();
+            })
+        }
+        
+        // sau khi truyền dữ liệu vào tham số -> hàm trả về 1 Promise resolve/reject tùy thuộc vào dữ liệu truyền vào sẽ thay đổi kết quả 
+        fetchWithRetry(`https://jsonplaceholder.typicode.com/users/12` , 3)
+            .then(result => console.log(result))
+            .catch(error => console.log(error))
                 
 
         
