@@ -152,8 +152,8 @@
     
     const p2 = new Promise((resolve , reject) => {
         setTimeout(() => {
-            reject(`Error2`)
-        },300)
+            resolve(`Error2`)
+        },800)
     }); 
 
     const p3 = new Promise((resolve , reject) => {
@@ -173,8 +173,53 @@
 // Bài 12 : Tự viết hàm promiseAll (không dùng Promise.all) 
 
 // Đề bài : nhận 1 mảng các Promise -> trả về 1 Promise mới resolve là mảng các Promise trước đó nếu tất cả resolve nếu reject trả về reject đó 
+// Phương thức Promise.all() : tham số nhận vào là 1 mảng các Promise đang ở trạng thái pending kết quả trả về sẽ có 2 trường hợp 
+    // + Promise.all() sẽ chờ tất cả các Promise chạy xong nếu tất cả Promise đều resolve -> trả về 1 Promise resolve mảng đó
+    // + nếu có 1 trong các Promise reject -> trả về 1 Promise reject lỗi đó 
+    
+    let arrP = [p1 , p2 , p3];
 
+    // Cách 1 : sử dụng đệ quy chạy tuần tự các phần tử trong mảng Promise -> đợi Promise này chạy xong đến Promise khác
     function promiseAll(promises){
-        
+        return new Promise((resolve , reject) => {
+            let results = [];
+            let count = 0;
 
+            function recursive(){
+                if(count === promises.length) return resolve(results);
+                let promise = promises[count];
+                promise.then(value => {
+                    results.push(value);
+                    count++;
+                    recursive();
+                }).catch(error => reject(error))
+            }
+            recursive();
+        })
     }
+
+    promiseAll(arrP).then(results => {
+        results.forEach(result => console.log(result))
+    }).catch(error => console.log(error))
+
+    // Cách 2 : sử dụng vòng lặp cho các Promise chạy song song -> kết quả Promise nào xong trước được đưa về call stack chạy trước 
+
+    function promiseAllPro(promises){
+        return new Promise((resolve , reject) => {
+            let results = [];
+            let count = 0;
+            for(let promise of promises){
+                promise
+                .then(result => {
+                    results[count] = result ;
+                    count++;
+                    if(count === promises.length) resolve(results);
+                })
+                .catch(error => reject(error));
+            }
+        })
+    }
+
+    promiseAllPro(arrP).then(results => {
+        results.forEach(result => console.log(result))
+    }).catch(error => console.log(error))
