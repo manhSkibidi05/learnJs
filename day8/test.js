@@ -1,40 +1,42 @@
-const p1 = new Promise((resolve , reject) => {
-        setTimeout(() => {
-            resolve(`OK1`)
-        },1000)
-    });
-    
-    const p2 = new Promise((resolve , reject) => {
-        setTimeout(() => {
-            resolve(`Error2`)
-        },1000)
-    }); 
-
-    const p3 = new Promise((resolve , reject) => {
-        setTimeout(() => {
-            resolve(`OK3`)
-        },1500)
-    }); 
-
-let arrP = [p1 , p2 , p3];
-    // Promise.all(arrP).then(results => {
-    //     results.forEach(result => console.log(result.status))
-    // }).catch(error => console.log(error));
-
-    function promiseAll(promises) {
-    return new Promise((resolve, reject) => {
-        let results = [];
-        let completed = 0;
-        promises.forEach((promise, index) => {
-            promise.then(value => {
-                results[index] = value;
-                completed++;
-                if (completed === promises.length) resolve(results);
-            }).catch(reject);
-        });
-    });
+function fetchWithRetry(url, maxRetries = 2) {
+    let attempt = 0;
+    function attemptFetch() {
+        return fetch(url)
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
+            .catch(err => {
+                attempt++;
+                if (attempt <= maxRetries) {
+                    console.log(`Retry ${attempt}/${maxRetries} for ${url}`);
+                    return attemptFetch();
+                }
+                throw err;
+            });
+    }
+    return attemptFetch();
 }
 
-    promiseAll(arrP).then(results => {
-        results.forEach(result => console.log(result))
-    }).catch(error => console.log(error))
+function loadDashboard() {
+    const urls = {
+        users: 'https://jsonplaceholder.typicode.com/users',
+        posts: 'https://jsonplaceholder.typicode.com/postss',
+        comments: 'https://jsonplaceholder.typicode.com/comments'
+    };
+    
+    Promise.all([
+        fetchWithRetry(urls.users),
+        fetchWithRetry(urls.posts),
+        fetchWithRetry(urls.comments)
+    ])
+    .then(([users, posts, comments]) => {
+        console.log(`Tổng users: ${users.length}`);
+        console.log(`Tổng posts: ${posts.length}`);
+        console.log(`Tổng comments: ${comments.length}`);
+        console.log(`Bài viết trung bình/user: ${posts.length / users.length}`);
+    })
+    .catch(err => console.error('Dashboard failed:', err));
+}
+
+loadDashboard();
