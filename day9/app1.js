@@ -64,7 +64,7 @@
     getData();
     console.log(`Dữ liệu đang được tìm...`);
 
-// 1.3. So sánh với Promise .then()
+// 2. So sánh với Promise .then()
 
     // vd : fetch dữ liệu sử dụng Promise thuần 
 
