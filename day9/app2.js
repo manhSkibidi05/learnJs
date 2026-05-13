@@ -103,7 +103,7 @@
     // - Đối với async/await sử dụng cơ chế chuyển đổi lỗi từ Promise rejection sang exception cho phép bắt lỗi với try/catch
     // - Đối với Promise sử dụng .catch() để bắt lỗi , hàm callback trong bất đồng bộ phải tự định nghĩa để bắt lỗi cách thủ công
 
-// 5. Chuyển đổi từ Promise sang Async/Await 
+// 4. Chuyển đổi từ Promise sang Async/Await 
 
     // Bước 1 : Xác định hàm cần chuyển : hàm trả về Promise vd:  fetch hoặc promisify 
     // Bước 2 : Thêm async vào hàm và hàm bên trong sử dụng await
