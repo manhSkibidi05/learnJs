@@ -86,3 +86,7 @@
     // - Xử lý lỗi chi tiết khi kết hợp 
     // - Giới hạn concurrency (chạy tối đa N tác vụ cùng lúc)
     
+
+    // (*) Toán tử 3 ngôi : Điều kiện ? biểu thức 1 : biểu thức 2 
+    // -> biểu thức là những câu lệnh có thể gán cho 1 biến 
+    // -> không thể sử dụng câu lệnh trong toán tử 3 ngôi vd : throw , return ,... 
