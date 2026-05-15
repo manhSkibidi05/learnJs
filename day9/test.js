@@ -1,38 +1,27 @@
-let urls = [`https://jsonplaceholder.typicode.com/users/1`,`https://jsonplaceholder.typicode.com/users/21` , `https://jsonplaceholder.typicode.com/users/6` ,
-        `https://jsonplaceholder.typicode.com/users/5`, `https://jsonplaceholder.typicode.com/users/52`
-    ];
-
-    // function fetchUrl(url){
-    //     return new Promise((resolve , reject) => {
-    //         fetch(url)
-    //             .then(res => {
-    //                 if(!res.ok) throw new Error(`lỗi`);
-    //                 return res.json();
-    //             })
-    //             .then(val => resolve(val))
-    //             .catch(err => reject(err));
-    //     })
-    // }
-
-    function fetchUrl(url) {
+    function fetchUrl(url){
         return fetch(url)
-            .then(res => {
-                if (!res.ok) throw new Error(`lỗi`);
-                return res.json();
-            });
+            .then(response => {
+                if(!response.ok) throw new Error(`Lỗi mạng`);
+                return response.json();
+            })
     }
 
-    async function filterUrl(arr){
-        let arrFetch = arr.map(url => fetchUrl(url))
-        let results = await Promise.allSettled(arrFetch);
-        let urlSuccess = [];
-        let urlFailed = [];
-        results.forEach((result , index) => {
-            if(result.status === `fulfilled`) urlSuccess.push(arr[index]);
-            else urlFailed.push(arr[index]);
-            
-        })
-        console.log(urlSuccess);
-        console.log(urlFailed);
+    async function fetchWithRetry2(url , maxRetries , delayMs){
+        let count = 1;
+        let result = null;
+        while(count < maxRetries){
+            try{
+                result = await fetchUrl(url);
+                break;
+            }catch(err){
+                console.log(`Lỗi lần ${count} do : ${err.message}`);
+                count++;
+                console.log(`Đợi sau ${delayMs} ms để thử lại`);
+                await new Promise((resolve , reject) => {setTimeout(() => console.log(`?`) , delayMs)});
+            }
+        }
+        if(result) console.log(result);
+        else console.log(`Hêt lần thử`)
     }
-    filterUrl(urls);
+
+    fetchWithRetry2(`https://jsonplaceholder.typicode.com/users/12` , 3 , 1000);
