@@ -120,5 +120,33 @@
     }, 1000);
 
 // Bài 11 : load ảnh lazy với async/await và giới hạn concurrency
- 
 
+    async function loadImgConcurrency(imgs , concurrency){
+        let results = Array(imgs.length);
+
+        async function loadImg(index){
+            try{
+                let res = await fetch(imgs[index]);
+                if(!res.ok) throw new Error(`Lỗi ${res.status}`);
+                let value = await res.json();
+                return results[index] = value;
+            }catch(err){
+                throw new Error(`Lỗi tại đường dẫn ${imgs[index]} : ${err.message}`);
+            }
+        }
+
+        let queue = [];
+        for(let i = 0 ; i < imgs.length ; i++){
+            let promise = loadImg(i).finally(() => {
+                let pos = queue.indexOf(promise);
+                if(pos !== -1) queue.splice(pos , 1);
+            });
+            queue.push(promise);
+            if(queue.length >= concurrency) await Promise.race(queue);
+        }
+        await Promise.all(queue);
+        return results;
+    }
+
+    loadImgConcurrency(urls , 3).then(rs => console.log(rs)).catch(err => console.log(err))
+    
