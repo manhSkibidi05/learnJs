@@ -61,3 +61,16 @@
     ))
     
     
+    // - Destructuring : là kĩ thuật sử dụng trong js để gán nhiều các giá trị của 1 arr/obj cho nhiều biến độc lập ngoài ra còn được sử dụng để hoán đảo
+    // giá trị của 2 biến  -> kĩ thuật sử dụng bên trái dấu bằng 
+
+    // - Spread operator : là toán tử sử dụng trong js để phân rã các giá trị nằm trong của 1 iterator (arr , obj , string ...) các giá trị nằm bên trong 
+    // nó sẽ được phân rã thành các giá trị độc lập , được sử dụng sao chép nông 1 arr/obj mới không gây ảnh hưởng tới dữ liệu ban đầu
+    // -> sử dụng dấu ...+tên iterator nằm bên phải dấu bằng 
+
+    // - rest parameter : là 1 tham số đặc biệt khi định nghĩa hàm  của js , lúc này nó sẽ gom lại các đối số truyền vào thành 1 mảng rồi hàm đó 
+    // sẽ xử lí toàn bộ dữ liệu được truyền vào đó , được sử dụng đối với các hàm chưa biết trược số đối số sẽ truyền vào sẽ sử dụng tham số rest này
+    // -> sử dụng dấu ...+ tên tham số đặt ở cuối các tham số lúc định nghĩa 1 hàm 
+    
+    // - Tham số (parameter) : là các tham số được truyền vào hàm lúc định nghĩa 1 hàm 
+    // - Đối số (argument) : là các đối số được truyền vào lúc gọi hàm -> Đối số có thể là 1 biến , 1 hằng , 1 biểu thức trả về giá trị bất kì 
