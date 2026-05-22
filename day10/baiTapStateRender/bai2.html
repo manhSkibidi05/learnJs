@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2</title>
+</head>
+<body>
+    <div class="container">
+        
+    </div>
+    <input class="select-color" type="color" name="" id="" value="#111111">
+
+    <script>
+        // biến state
+        let colors = [];
+
+        // hàm render 
+        function render(){
+            let container = document.querySelector(`.container`);
+            container.innerHTML = ``;
+
+            for(let color of colors){
+                container.appendChild(createElements(color))
+            }
+        }
+
+        // hàm tạo các phần tử trong container 
+        function createElements(color){
+            let blockColor = document.createElement(`div`);
+            blockColor.style.backgroundColor = color;
+            blockColor.style.height = `40px`;
+            console.log(color);
+            return blockColor;
+        }
+
+        // hàm ảnh hưởng tới state
+        function addColor(color){
+            colors.push(color);
+            render();
+        }
+        
+        // sự kiện ảnh hưởng tới state 
+        let inputColor = document.querySelector(`.select-color`);
+        inputColor.addEventListener(`change` , (e) => {
+            addColor(e.target.value);
+        })
+
+
+    </script>
+</body>
+</html>

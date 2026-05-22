@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Số Đếm : <span class="count-number">0</span></h1>
+    </div>
+    <button class="count-up" type="button">Tăng</button>
+    <button class="count-down" type="button">Giảm</button>
+    <button class="count-reset" type="button">Làm mới</button>
+
+    <script>
+        // Bài 1 : Counter (Bộ đếm)
+
+        // Biến state 
+        let count = 0;
+
+        // Hàm render()
+        function render(){
+            let container = document.querySelector(`.container`);
+            container.innerHTML = ``;
+
+            container.appendChild(createElements(count));
+        }
+
+        // hàm tạo ra các phần tử trong khối container  
+        function createElements(value){
+            let tieuDe = document.createElement(`h1`);
+            tieuDe.textContent = `Số đếm : `;
+            let countShow = document.createElement(`span`);
+            countShow.textContent = value;
+            countShow.className = `count-number`;
+            tieuDe.appendChild(countShow);
+            return tieuDe;
+        }
+
+        // Các hàm thay đổi state 
+        function upValue(){
+            count++;
+            render();
+        }
+
+        function downValue(){
+            count--;
+            render();
+        }
+
+        function resetValue(){
+            count = 0;
+            render();
+        }
+
+        // các sự kiện ảnh hưởng tới state
+        let btnUp = document.querySelector(`.count-up`).addEventListener(`click` , upValue);
+        let btnDown = document.querySelector(`.count-down`).addEventListener(`click` , downValue);
+        let btnReset = document.querySelector(`.count-reset`).addEventListener(`click` , resetValue);
+
+
+    </script>
+</body>
+</html>

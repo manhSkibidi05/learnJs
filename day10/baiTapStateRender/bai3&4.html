@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-color: brown;
+        }
+        .container{
+            display:flex;
+            flex-direction: column;
+            gap:10px;
+            margin-top: 10px;
+        }
+    </style>
+    <title>Bài 3</title>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <input class="input-task" type="text" name="" id="">
+    <button class="btn-add" type="button">Thêm task</button>
+    <select class="task-state" name="" id="">
+        <option value="all">Tất cả task</option>
+        <option value="unfinished">Task chưa hoàn thành</option>
+        <option value="finished">Task hoàn thành</option>
+    </select>
+    <h3 class="task-title">Danh sách task</h3>
+    <div class="container">
+        
+    </div>
+    <script>
+        // Biến state 
+        let tasks = [];
+        let tasksState = `all`;
+        
+        // Hàm render 
+        function render(){
+            const container = document.querySelector(`.container`);
+            container.innerHTML =``;
+
+            let tasksFilter = [...tasks];
+            if(tasksState === `unfinished`){
+                tasksFilter = tasksFilter.filter(task => task[`completed`] === false);
+            }
+            if(tasksState === `finished`){
+                tasksFilter = tasksFilter.filter(task => task[`completed`] === true);
+            }
+            
+            for(let task of tasksFilter){
+                container.appendChild(createElement(task[`id`] , task[`content`] , task[`completed`])) ;
+            }
+        }
+
+        // Hàm tạo task mới hiện thị 
+        function createElement(id ,content , completed){
+            let card = document.createElement(`div`);
+            card.className = `task-card`;
+
+            let input = document.createElement(`input`);
+            input.type = `checkbox`;
+            input.id = id;
+            input.checked = completed;
+            input.className = `task-input`;
+            input.addEventListener(`change` , () => {
+                changeTask(id);
+            })
+            card.appendChild(input);
+
+            let text = document.createElement(`span`);
+            if(completed) text.style.textDecorationLine = `line-through`;
+            text.textContent = content;
+            text.className = `task-content`;
+            card.appendChild(text);
+
+            let btnRemove = document.createElement(`button`);
+            btnRemove.type = `button`;
+            btnRemove.textContent = `Xóa`;
+            btnRemove.addEventListener(`click` , () =>{
+                removeTask(id);
+            });
+            card.appendChild(btnRemove);
+            
+            return card;
+        }
+
+        // Các hàm ảnh hưởng tới state
+        function addTask(id , content , completed){
+            let newTask = {
+                id : id,
+                content : content,
+                completed : completed
+            }
+            tasks.push(newTask);
+            render();
+        }
+
+        function removeTask(id){
+            let pos = tasks.findIndex(task => task[`id`] === id);
+            if(pos !== -1) tasks.splice(pos ,1);
+            render();
+        }
+
+        function changeTask(id){
+            let pos = tasks.findIndex(task => task[`id`] === id);
+            if(pos !== -1) tasks[pos][`completed`] = !tasks[pos][`completed`];
+            render();
+        }
+
+        function filterTask(trangThai){
+            tasksState = trangThai;
+            render();
+        }
+
+
+        // Các sự kiện ngoài ảnh hưởng tới state 
+        const inputTask = document.querySelector(`.input-task`);
+        const btnAdd = document.querySelector(`.btn-add`);
+
+        btnAdd.addEventListener(`click` , (e) => {
+            let content = inputTask.value;
+            let id = new Date().getTime();
+            addTask(id , content , false);
+            inputTask.value = ``;
+        })
+
+        const selectTask = document.querySelector(`.task-state`);
+        selectTask.addEventListener(`change` , (e) => {
+            filterTask(e.target.value);
+        })
+
+    </script>
+</body>
+</html>

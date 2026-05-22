@@ -56,3 +56,12 @@
         e.stopPropagation() // ngăn chặn sự kiện nổi bọt lên phần tử cha 
     })
     
+    // - DOM manipulation là cácc thao câu lệnh trong js thao tác tới các phần tử của html (lấy , xóa , cập nhật và sự kiện )
+    // + lấy phần tử : Thông qua các phương thức của DOM có thể lấy phần tử của html . vd : querySelector(`css selector`)
+    // + tạo phần tử : Có thể tạo các phần tử HTML thông qua js bằng phương thức createElement(`thẻ`) -> sau đó thêm các thuộc tính và nội dung vd: className = `tên class`
+    // + xóa phần tử : sử dụng phương thức remove() tự xóa phần tử 
+    // + cập nhật : có thể cập nhật về thuộc tính , dữ liệu hiển thị cho 1 phần tử thông qua js.
+        // -> cập nhật thuộc tính sử dụng dấu chấm .+thuộc tính = `nội dung sửa` , chỉnh sửa dữ liệu hiện thị = textContent() , innerHTML() 
+    // + sự kiện : sử dụng addEventListener() để gán sự kiện cho 1 phần tử -> hàm đó cần truyền vào 2 đối số là hành động vd : click , mouseout .. , hàm callback sẽ 
+    // được gọi lại khi hành động diễn ra. Hàm callback có thể truyền vào đối số e (event) để sử dụng các thuộc tính và phương thức có sẵn của đối tượng event
+
