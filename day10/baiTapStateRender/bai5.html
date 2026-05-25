@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            color:azure;
+            background-color: black;
+        }
+        .container{
+            display:grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap:5px;
+        }
+        .card-product{
+            display:flex;
+            flex-direction: column;
+        }
+    </style>
+    <title>Bài 5 </title>
+</head>
+<body>
+    <!-- Tìm kiếm sản phẩm -->
+    <h2>Tìm kiếm sản phẩm</h2>
+    <input type="text" name="searching" id="searching">
+
+    <!-- Thêm sản phẩm -->
+    <h2>Thêm sản phẩm</h2>
+    <input type="text" name="product-name" id="product-name">
+    <input type="number" name="product-price" id="product-price">
+    <button class="btn-add" type="button">Thêm</button>
+
+    <!-- Danh sách sản phẩm -->
+    <h2>Danh sách sản phẩm</h2>
+    <div class="container">
+        
+    </div>
+
+    <script>
+        // các phần tử state 
+        let products = [];
+        let searchKeyword = ``;
+
+        // định nghĩa hàm render 
+        function render(){
+            const container = document.querySelector(`.container`);
+            container.innerHTML = ``;
+
+            let productsFilter = [...products];
+            
+            if(searchKeyword.trim() !== ``){
+                productsFilter = productsFilter.filter(product => product[`name`].includes(searchKeyword));
+                console.log(searchKeyword);
+            }
+
+            for(let product of productsFilter){
+                container.appendChild(createElement(product[`id`] ,product[`name`] ,product[`price`]));
+            }
+        }
+
+        function createElement(id , name , price){
+            let card = document.createElement(`div`);
+            card.className = `card-product`;
+
+            let productName = document.createElement(`h3`);
+            productName.textContent = name;
+            card.appendChild(productName);
+
+            let productPrice = document.createElement(`span`);
+            productPrice.textContent = `Giá : ${price} vnd`;
+            card.appendChild(productPrice);
+
+            return card;
+        }
+
+
+        // định nghĩa hàm ảnh hưởng tới state
+        function addProduct(product){
+            products.push(product);
+            render();
+        }
+
+        function searching(keyword){
+            searchKeyword = keyword;
+            render();
+        }
+
+        // các sự kiện DOM ảnh hưởng tới state
+        let productName = document.querySelector(`#product-name`);
+        let productPrice = document.querySelector(`#product-price`);
+        let btnAdd = document.querySelector(`.btn-add`);
+
+        btnAdd.addEventListener(`click` , (e) => {
+            if(productName.value.trim() !== ``){
+                let name = productName.value.trim();
+                let id = new Date().getTime();
+                let price = productPrice.value;
+                let newProduct = {
+                    id : id,
+                    name : name ,
+                    price : price
+                }
+                addProduct(newProduct);
+            }
+            productName.value = ``;
+            productPrice.value = ``;
+        })
+
+        let search = document.querySelector(`#searching`);
+        search.addEventListener(`input` , (e) => {
+            searching(e.target.value);
+        })
+
+
+    </script>
+</body>
+</html>

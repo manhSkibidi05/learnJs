@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Bài 6</title>
+</head>
+<body>
+    
+
+    <script>
+        // các phần tử state 
+        let products = [
+            {id : 0 , name : `Sản phẩm 0` , price : 1},
+            {id : 1 , name : `Sản phẩm 1` , price : 1},
+            {id : 2 , name : `Sản phẩm 2` , price : 1},
+            {id : 3 , name : `Sản phẩm 3` , price : 1},
+            {id : 4 , name : `Sản phẩm 4` , price : 1},
+            {id : 5 , name : `Sản phẩm 5` , price : 1},
+            {id : 6 , name : `Sản phẩm 6` , price : 1},
+            {id : 7 , name : `Sản phẩm 7` , price : 1},
+            {id : 8 , name : `Sản phẩm 8` , price : 1},
+            {id : 9 , name : `Sản phẩm 9` , price : 1},
+            {id : 10 , name : `Sản phẩm 10` , price : 1},
+            {id : 11 , name : `Sản phẩm 11` , price : 1},
+            {id : 12 , name : `Sản phẩm 12` , price : 1},
+            {id : 13 , name : `Sản phẩm 13` , price : 1}
+        ];
+        let currentPage = 1;
+
+        // định nghĩa hàm render 
+        function render(){
+            document.body.innerHTML = ``;
+            // hiện thị chức năng chuyển trang
+            let showPage = document.createElement(`h1`);
+            showPage.textContent = `Trang ${currentPage}`;
+            document.body.appendChild(showPage);
+
+            let btnPre = document.createElement(`button`);
+            btnPre.textContent = `Trang trước`;
+            btnPre.addEventListener(`click` , () => { previousPage()});
+            document.body.appendChild(btnPre);
+
+            let btnNext = document.createElement(`button`);
+            btnNext.textContent = `Trang sau`;
+            btnNext.addEventListener(`click` , () => { nextPage()});
+            document.body.appendChild(btnNext);
+
+            // hiện thị chức năng thêm sản phẩm
+            let titleAdd = document.createElement(`h2`);
+            titleAdd.textContent = `Thêm sản phẩm`;
+            document.body.appendChild(titleAdd);
+
+            let nameAdd = document.createElement(`input`);
+            nameAdd.type = `text`;
+            nameAdd.id = `product-name`;
+            document.body.appendChild(nameAdd);
+
+            let priceAdd = document.createElement(`input`);
+            priceAdd.type = `number`;
+            priceAdd.id = `product-price`;
+            document.body.appendChild(priceAdd);
+
+            let btnAdd = document.createElement(`button`);
+            btnAdd.textContent = `Thêm`;
+            btnAdd.addEventListener(`click` , (e) => {
+                if(nameAdd.value.trim() !== ``){
+                    let name = nameAdd.value.trim();
+                    let id = products.length;
+                    let price = priceAdd.value;
+                    let newProduct = {
+                        id : id,
+                        name : name ,
+                        price : price
+                    }
+                    addProduct(newProduct);
+                }
+                nameAdd.value = ``;
+                priceAdd.value = ``;
+            })
+            document.body.appendChild(btnAdd);
+            
+
+            // hiện thị sản phẩm
+            let container = document.createElement(`div`);
+            container.className = `container`;
+            document.body.appendChild(container);
+
+            let productsFilter = [...products];
+
+            for(let i = (currentPage - 1) * 5 ; i < currentPage * 5 ; i++){
+                if(!productsFilter[i]) return;
+                container.appendChild(createElement(productsFilter[i][`id`] , productsFilter[i][`name`] , productsFilter[i][`price`]));
+            }
+        }
+
+        function createElement(id , name , price){
+            let card = document.createElement(`div`);
+            card.className = `card-product`;
+
+            let productName = document.createElement(`h3`);
+            productName.textContent = name;
+            card.appendChild(productName);
+
+            let productPrice = document.createElement(`span`);
+            productPrice.textContent = `Giá : ${price} vnd`;
+            card.appendChild(productPrice);
+
+            return card;
+        }
+
+
+        // định nghĩa hàm ảnh hưởng tới state
+        function addProduct(product){
+            products.push(product);
+            render();
+        }
+
+        function previousPage(){
+            if(currentPage <= 1) return;
+            currentPage--;
+            render();
+        }
+
+        function nextPage(){
+            let num1 = products.length % 5;
+            let num2 = products.length / 5;
+            if(num1 === 0 && currentPage === num2) return;
+            if(num1 !== 0 && currentPage === Math.ceil(num2)){
+                console.log(Math.ceil(num2))
+                return
+            } 
+
+            currentPage++;
+            render();
+        }
+
+        render();
+
+
+    </script>
+</body>
+</html>
