@@ -7,8 +7,16 @@
     <title>Bài 6</title>
 </head>
 <body>
-    
+    <h1 class="page-show">Trang 1</h1>
+    <button class="btn-pre">Trang trước</button>
+    <button class="btn-next">Trang sau</button>
+    <h2>Thêm sản phẩm</h2>
+    <input type="text" name="product-name" id="product-name">
+    <input type="number" name="product-price" id="product-price">
+    <button class="btn-add" type="button">Thêm</button>
+    <div class="container">
 
+    </div>
     <script>
         // các phần tử state 
         let products = [
@@ -31,61 +39,12 @@
 
         // định nghĩa hàm render 
         function render(){
-            document.body.innerHTML = ``;
-            // hiện thị chức năng chuyển trang
-            let showPage = document.createElement(`h1`);
-            showPage.textContent = `Trang ${currentPage}`;
-            document.body.appendChild(showPage);
+            let pageShow = document.querySelector(`.page-show`);
+            pageShow.textContent = `Trang ${currentPage}`;
 
-            let btnPre = document.createElement(`button`);
-            btnPre.textContent = `Trang trước`;
-            btnPre.addEventListener(`click` , () => { previousPage()});
-            document.body.appendChild(btnPre);
-
-            let btnNext = document.createElement(`button`);
-            btnNext.textContent = `Trang sau`;
-            btnNext.addEventListener(`click` , () => { nextPage()});
-            document.body.appendChild(btnNext);
-
-            // hiện thị chức năng thêm sản phẩm
-            let titleAdd = document.createElement(`h2`);
-            titleAdd.textContent = `Thêm sản phẩm`;
-            document.body.appendChild(titleAdd);
-
-            let nameAdd = document.createElement(`input`);
-            nameAdd.type = `text`;
-            nameAdd.id = `product-name`;
-            document.body.appendChild(nameAdd);
-
-            let priceAdd = document.createElement(`input`);
-            priceAdd.type = `number`;
-            priceAdd.id = `product-price`;
-            document.body.appendChild(priceAdd);
-
-            let btnAdd = document.createElement(`button`);
-            btnAdd.textContent = `Thêm`;
-            btnAdd.addEventListener(`click` , (e) => {
-                if(nameAdd.value.trim() !== ``){
-                    let name = nameAdd.value.trim();
-                    let id = products.length;
-                    let price = priceAdd.value;
-                    let newProduct = {
-                        id : id,
-                        name : name ,
-                        price : price
-                    }
-                    addProduct(newProduct);
-                }
-                nameAdd.value = ``;
-                priceAdd.value = ``;
-            })
-            document.body.appendChild(btnAdd);
-            
-
-            // hiện thị sản phẩm
-            let container = document.createElement(`div`);
-            container.className = `container`;
-            document.body.appendChild(container);
+            // hiện thị danh sách sản phẩm
+            let container = document.querySelector(`.container`);
+            container.innerHTML = ``;
 
             let productsFilter = [...products];
 
@@ -114,6 +73,8 @@
         // định nghĩa hàm ảnh hưởng tới state
         function addProduct(product){
             products.push(product);
+            let totalPage = Math.ceil(products.length / 5);
+            currentPage = totalPage;
             render();
         }
 
@@ -124,20 +85,40 @@
         }
 
         function nextPage(){
-            let num1 = products.length % 5;
-            let num2 = products.length / 5;
-            if(num1 === 0 && currentPage === num2) return;
-            if(num1 !== 0 && currentPage === Math.ceil(num2)){
-                console.log(Math.ceil(num2))
-                return
-            } 
-
+            let totalPage = Math.ceil(products.length / 5) ;
+            if(currentPage >= totalPage) return;
             currentPage++;
             render();
         }
 
-        render();
+        // sự kiện ảnh hưởng tới state
 
+        let btnPre = document.querySelector(`.btn-pre`);
+        btnPre.addEventListener(`click` , () => { previousPage()});
+            
+        let btnNext = document.querySelector(`.btn-next`);
+        btnNext.addEventListener(`click` , () => { nextPage()});
+
+        let productName = document.querySelector(`#product-name`);
+        let productPrice = document.querySelector(`#product-price`);
+        let btnAdd = document.querySelector(`.btn-add`);
+        btnAdd.addEventListener(`click` , (e) => {
+            if(productName.value.trim() !== `` && productPrice.value > 0 && !isNaN(productPrice.value)){
+                let name = productName.value.trim();
+                let id = products.length;
+                let price = productPrice.value;
+                let newProduct = {
+                    id : id,
+                    name : name ,
+                    price : price
+                }
+                addProduct(newProduct);
+            }
+            productName.value = ``;
+            productPrice.value = ``;
+        })
+
+        render();
 
     </script>
 </body>

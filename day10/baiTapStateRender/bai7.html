@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container{
+            display:grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap:10px;
+        }
+        .cart-container{
+            padding:10px;
+            width:400px;
+            height:400px;
+            background-color: blueviolet;
+            color:white;
+            border-radius: 10px;
+            position:fixed;
+            bottom:10px;
+            right:10px;
+            overflow: auto;
+        }
+        
+    </style>
+    <title>Bài 7</title>
+</head>
+<body>
+    <h1 class="page-show">Trang 1</h1>
+    <button class="btn-pre">Trang trước</button>
+    <button class="btn-next">Trang sau</button>
+    <div class="container">
+
+    </div>
+    <div class="cart-container">
+        <h2 class="cart-title">Giỏ hàng</h2>
+        <div class="cart-products">
+
+        </div>
+        <h3 class="cart-total">Tổng tiền : 0 vnd</h3>
+    </div>
+
+    <script>
+        // các phần tử state 
+        let products = [
+            {id : 0 , name : `Sản phẩm 0` , totalProduct :10 , price : 10},
+            {id : 1 , name : `Sản phẩm 1` , totalProduct :10 , price : 15},
+            {id : 2 , name : `Sản phẩm 2` , totalProduct :10 , price : 16},
+            {id : 3 , name : `Sản phẩm 3` , totalProduct :10 , price : 17},
+            {id : 4 , name : `Sản phẩm 4` , totalProduct :10 , price : 18},
+            {id : 5 , name : `Sản phẩm 5` , totalProduct :10 , price : 19},
+            {id : 6 , name : `Sản phẩm 6` , totalProduct :10 , price : 11},
+            {id : 7 , name : `Sản phẩm 7` , totalProduct :10 , price : 12},
+            {id : 8 , name : `Sản phẩm 8` , totalProduct :10 , price : 13},
+            {id : 9 , name : `Sản phẩm 9` , totalProduct :10 , price : 14},
+            {id : 10 , name : `Sản phẩm 10` , totalProduct :10 , price : 21},
+            {id : 11 , name : `Sản phẩm 11` , totalProduct :10 , price : 31},
+            {id : 12 , name : `Sản phẩm 12` , totalProduct :10 , price : 41},
+            {id : 13 , name : `Sản phẩm 13` , totalProduct :10 , price : 51}
+        ];
+
+        let currentPage = 1;
+        
+        let cart = [];
+        let totalPrice = 0;
+
+        // định nghĩa hàm render 
+        function render(){
+            let pageShow = document.querySelector(`.page-show`);
+            pageShow.textContent = `Trang ${currentPage}`;
+
+            // hiện thị danh sách sản phẩm
+            let container = document.querySelector(`.container`);
+            container.innerHTML = ``;
+
+            let productsFilter = [...products];
+
+            for(let i = (currentPage - 1) * 5 ; i < currentPage * 5 ; i++){
+                if(!productsFilter[i]) return;
+                container.appendChild(createElement(productsFilter[i][`id`] , productsFilter[i][`name`], productsFilter[i][`totalProduct`] , productsFilter[i][`price`]));
+            }
+        }
+
+        function createElement(id , name ,total , price){
+            let card = document.createElement(`div`);
+            card.className = `card-product`;
+
+            let productName = document.createElement(`h3`);
+            productName.textContent = name;
+            card.appendChild(productName);
+
+            let productTotal = document.createElement(`p`);
+            productTotal.textContent = `Số lượng còn lại : ${total}`;
+            card.appendChild(productTotal);
+
+            let productPrice = document.createElement(`span`);
+            productPrice.textContent = `Giá : ${price} vnd`;
+            card.appendChild(productPrice);
+
+            let productAddCart = document.createElement(`button`);
+            productAddCart.textContent = `Thêm vào giỏ hàng`;
+            productAddCart.addEventListener(`click` , () => {
+                addProductToCart(id);
+            })
+            card.appendChild(productAddCart);
+
+            return card;
+        }
+
+        // định nghĩa hàm render cart 
+        function renderCart(){
+            let cartProducts = document.querySelector(`.cart-products`);
+            cartProducts.innerHTML = ``;
+            
+            for(let product of cart){
+                cartProducts.appendChild(createElementProductInCart( product[`id`] , product[`name`] , product[`quantity`] , product[`price`]));
+            }
+
+            let cartProductsTotal = document.querySelector(`.cart-total`);
+            cartProductsTotal.textContent = `Tổng tiền trong giỏ hàng : ${totalPrice} vnd`;
+
+        }
+
+        function createElementProductInCart(id , name , quantity , price){
+            let card = document.createElement(`div`);
+            card.className = `card-product-cart`;
+
+            let cardName = document.createElement(`p`);
+            cardName.textContent = name;
+            card.appendChild(cardName);
+
+            let cardPrice = document.createElement(`p`);
+            cardPrice.textContent = `Giá : ${price} vnd`;
+            card.appendChild(cardPrice);
+
+            let cardQuantity = document.createElement(`span`);
+            cardQuantity.textContent = `Số lượng : ${quantity}`;
+            card.appendChild(cardQuantity);
+
+            let btnUp = document.createElement(`button`);
+            btnUp.textContent = `Tăng số lượng`;
+            btnUp.addEventListener(`click` , () => {upQuantity(id)});
+            card.appendChild(btnUp);
+
+            let btnDown = document.createElement(`button`);
+            btnDown.textContent = `Giảm số lượng`;
+            btnDown.addEventListener(`click` , () => {downQuantity(id)});
+            card.appendChild(btnDown);
+
+            let btnRemove = document.createElement(`button`);
+            btnRemove.textContent = `Xóa khỏi giỏ hàng`;
+            btnRemove.addEventListener(`click` , () => {
+                removeProductOutCart(id)
+            });
+            card.appendChild(btnRemove);
+
+            return card;
+        }
+
+
+        // hàm tác động tới state
+        function previousPage(){
+            if(currentPage <= 1) return;
+            currentPage--;
+            render();
+        }
+
+        function nextPage(){
+            let totalPage = Math.ceil(products.length / 5) ;
+            if(currentPage >= totalPage) return;
+            currentPage++;
+            render();
+        }
+
+        function addProductToCart(id){
+            let posCart = cart.findIndex(value => value[`id`] === id);
+            let posProducts = products.findIndex(value => value[`id`] === id);
+            if(posCart !== -1){
+                cart[posCart][`quantity`]++;
+            }else{
+                if(posProducts !== -1){
+                    let product = {...products[posProducts]};
+                    product[`quantity`] = 1;
+                    cart.push(product);
+                } 
+            }
+            posCart = cart.findIndex(value => value[`id`] === id);
+            products[posProducts][`totalProduct`] = cart[posCart][`totalProduct`] - cart[posCart][`quantity`];
+            render();
+            calTotalPrice();
+            renderCart();
+        }   
+
+        function upQuantity(id){
+            let pos = cart.findIndex(value => value[`id`] === id);
+            if(pos !== -1){
+                if(cart[pos][`quantity`] === cart[pos][`totalProduct`]) return;
+                cart[pos][`quantity`]++;
+                let posProducts = products.findIndex(value => value[`id`] === id);
+                products[posProducts][`totalProduct`] = cart[pos][`totalProduct`] - cart[pos][`quantity`];
+            } 
+            render();
+            calTotalPrice();
+            renderCart();
+        }
+
+        function downQuantity(id){
+            let pos = cart.findIndex(value => value[`id`] === id);
+            if(pos !== -1){
+                if(cart[pos][`quantity`] === 1) return;
+                cart[pos][`quantity`]--;
+                let posProducts = products.findIndex(value => value[`id`] === id);
+                products[posProducts][`totalProduct`] = cart[pos][`totalProduct`] - cart[pos][`quantity`];
+            }
+            render();
+            calTotalPrice();
+            renderCart();
+        }
+
+        function removeProductOutCart(id){
+            let pos = cart.findIndex(value => value[`id`] === id);
+            let posProducts = products.findIndex(value => value[`id`] === id);
+            products[posProducts][`totalProduct`] = cart[pos][`totalProduct`];
+            if(pos !== -1) cart.splice(pos , 1);
+            render();
+            calTotalPrice();
+            renderCart();
+        }
+
+        function calTotalPrice(){
+            totalPrice = cart.reduce((sum , value) =>sum += (value[`price`] * value[`quantity`]),0);
+        }
+
+        // sự kiện tác động tới state
+        let btnPre = document.querySelector(`.btn-pre`);
+        btnPre.addEventListener(`click` , () => { previousPage()});
+            
+        let btnNext = document.querySelector(`.btn-next`);
+        btnNext.addEventListener(`click` , () => { nextPage()});
+
+        // render lần đầu khi mới vào 
+        render()
+        
+    </script>
+</body>
+</html>

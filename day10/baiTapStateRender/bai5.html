@@ -17,6 +17,9 @@
             display:flex;
             flex-direction: column;
         }
+        .text-warning{
+            color:red;
+        }
     </style>
     <title>Bài 5 </title>
 </head>
@@ -50,8 +53,15 @@
             let productsFilter = [...products];
             
             if(searchKeyword.trim() !== ``){
-                productsFilter = productsFilter.filter(product => product[`name`].includes(searchKeyword));
+                productsFilter = productsFilter.filter(product => product[`name`].toLowerCase().includes(searchKeyword.toLowerCase()));
                 console.log(searchKeyword);
+            }
+
+            if(productsFilter.length === 0){
+                let warning = document.createElement(`p`);
+                warning.textContent = `Không tồn tại sản phẩm`;
+                warning.className = `text-warning`;
+                container.appendChild(warning);
             }
 
             for(let product of productsFilter){
@@ -92,7 +102,7 @@
         let btnAdd = document.querySelector(`.btn-add`);
 
         btnAdd.addEventListener(`click` , (e) => {
-            if(productName.value.trim() !== ``){
+            if(productName.value.trim() !== `` && productPrice.value > 0 && !isNaN(productPrice.value)){
                 let name = productName.value.trim();
                 let id = new Date().getTime();
                 let price = productPrice.value;
