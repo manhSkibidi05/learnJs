@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 8 - Form đăng ký với validation</title>
+    <style>
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #eef2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container {
+            background: white;
+            max-width: 480px;
+            width: 100%;
+            padding: 28px 32px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #1e293b;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .error {
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: block;
+        }
+        button {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .success {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+    // ----- STATE -----
+    let formData = {
+        username: '',
+        email: '',
+        password: ''
+    };
+    let errors = {
+        username: '',
+        email: '',
+        password: ''
+    };
+    let successMessage = '';
+
+    // ----- VALIDATION FUNCTIONS -----
+    function validateUsername(username) {
+        if (username.trim() === '') return 'Tên đăng nhập không được để trống';
+        return '';
+    }
+
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (email.trim() === '') return 'Email không được để trống';
+        if (!emailRegex.test(email)) return 'Email không hợp lệ (ví dụ: name@domain.com)';
+        return '';
+    }
+
+    function validatePassword(password) {
+        if (password === '') return 'Mật khẩu không được để trống';
+        if (password.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự';
+        return '';
+    }
+
+    function validateAll() {
+        const newErrors = {
+            username: validateUsername(formData.username),
+            email: validateEmail(formData.email),
+            password: validatePassword(formData.password)
+        };
+        errors = newErrors;
+        return !errors.username && !errors.email && !errors.password;
+    }
+
+    // ----- HANDLERS (cập nhật state) -----
+    function handleFieldChange(field, value) {
+        formData[field] = value;
+        // Cập nhật lỗi riêng cho field vừa thay đổi (real-time)
+        if (field === 'username') errors.username = validateUsername(value);
+        if (field === 'email') errors.email = validateEmail(value);
+        if (field === 'password') errors.password = validatePassword(value);
+        // Xóa success message khi bắt đầu gõ lại
+        successMessage = '';
+        render();
+    }
+
+    function handleSubmit() {
+        // Validate lại toàn bộ trước khi submit
+        const isValid = validateAll();
+        if (isValid) {
+            successMessage = `🎉 Đăng ký thành công! Chào mừng ${formData.username}.`;
+            // Có thể reset form nếu muốn:
+            // formData = { username: '', email: '', password: '' };
+            // validateAll(); // cập nhật lại errors
+            // render();
+        } else {
+            successMessage = '';
+        }
+        render();
+        // Nếu muốn in ra console dữ liệu thực tế
+        if (isValid) {
+            console.log('Dữ liệu đăng ký:', formData);
+        }
+    }
+
+    // ----- RENDER (tạo giao diện từ state) -----
+    function render() {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div class="form-container">
+                <h2>📝 Đăng ký tài khoản</h2>
+                ${successMessage ? `<div class="success">${successMessage}</div>` : ''}
+                <div class="form-group">
+                    <label>Tên đăng nhập</label>
+                    <input type="text" id="username" value="${escapeHtml(formData.username)}" placeholder="vd: nguyenvana">
+                    <span class="error">${errors.username || ''}</span>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" value="${escapeHtml(formData.email)}" placeholder="hello@example.com">
+                    <span class="error">${errors.email || ''}</span>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="password" value="${escapeHtml(formData.password)}" placeholder="Ít nhất 6 ký tự">
+                    <span class="error">${errors.password || ''}</span>
+                </div>
+                <button id="submitBtn">Đăng ký</button>
+            </div>
+        `;
+
+        // Gắn sự kiện sau khi DOM vừa tạo
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (usernameInput) {
+            usernameInput.addEventListener('input', (e) => handleFieldChange('username', e.target.value));
+        }
+        if (emailInput) {
+            emailInput.addEventListener('input', (e) => handleFieldChange('email', e.target.value));
+        }
+        if (passwordInput) {
+            passwordInput.addEventListener('input', (e) => handleFieldChange('password', e.target.value));
+        }
+        if (submitBtn) {
+            submitBtn.addEventListener('click', handleSubmit);
+        }
+    }
+
+    // Helper nhỏ để tránh XSS (dù ở đây không nguy hiểm nhưng vẫn nên)
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Khởi chạy lần đầu
+    render();
+</script>
+</body>
+</html>

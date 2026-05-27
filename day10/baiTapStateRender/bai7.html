@@ -45,16 +45,16 @@
         let products = [
             {id : 0 , name : `Sản phẩm 0` , totalProduct :10 , price : 10},
             {id : 1 , name : `Sản phẩm 1` , totalProduct :10 , price : 15},
-            {id : 2 , name : `Sản phẩm 2` , totalProduct :10 , price : 16},
+            {id : 2 , name : `Sản phẩm 2` , totalProduct :12 , price : 16},
             {id : 3 , name : `Sản phẩm 3` , totalProduct :10 , price : 17},
             {id : 4 , name : `Sản phẩm 4` , totalProduct :10 , price : 18},
-            {id : 5 , name : `Sản phẩm 5` , totalProduct :10 , price : 19},
+            {id : 5 , name : `Sản phẩm 5` , totalProduct :15 , price : 19},
             {id : 6 , name : `Sản phẩm 6` , totalProduct :10 , price : 11},
             {id : 7 , name : `Sản phẩm 7` , totalProduct :10 , price : 12},
             {id : 8 , name : `Sản phẩm 8` , totalProduct :10 , price : 13},
             {id : 9 , name : `Sản phẩm 9` , totalProduct :10 , price : 14},
             {id : 10 , name : `Sản phẩm 10` , totalProduct :10 , price : 21},
-            {id : 11 , name : `Sản phẩm 11` , totalProduct :10 , price : 31},
+            {id : 11 , name : `Sản phẩm 11` , totalProduct :110 , price : 31},
             {id : 12 , name : `Sản phẩm 12` , totalProduct :10 , price : 41},
             {id : 13 , name : `Sản phẩm 13` , totalProduct :10 , price : 51}
         ];
@@ -76,7 +76,7 @@
             let productsFilter = [...products];
 
             for(let i = (currentPage - 1) * 5 ; i < currentPage * 5 ; i++){
-                if(!productsFilter[i]) return;
+                if(!productsFilter[i]) break;
                 container.appendChild(createElement(productsFilter[i][`id`] , productsFilter[i][`name`], productsFilter[i][`totalProduct`] , productsFilter[i][`price`]));
             }
         }
@@ -134,7 +134,7 @@
             card.appendChild(cardPrice);
 
             let cardQuantity = document.createElement(`span`);
-            cardQuantity.textContent = `Số lượng : ${quantity}`;
+            cardQuantity.textContent = `Số lượng trong giỏ hàng: ${quantity}`;
             card.appendChild(cardQuantity);
 
             let btnUp = document.createElement(`button`);
@@ -184,7 +184,9 @@
                     cart.push(product);
                 } 
             }
+
             posCart = cart.findIndex(value => value[`id`] === id);
+            if(products[posProducts][`totalProduct`] <= 0 ) return;
             products[posProducts][`totalProduct`] = cart[posCart][`totalProduct`] - cart[posCart][`quantity`];
             render();
             calTotalPrice();

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .clock{
+            padding:20px;
+            display:flex;
+            gap:5px;
+            border-width: 2px;
+            border-radius: 50%;
+        }
+    </style>
+    <title>Bài 9</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Đồng hồ bấm giờ</h1>
+        <div class="clock">
+            <h2 class="clock-hour">00 :</h2>
+            <h2 class="clock-min">00 :</h2>
+            <h2 class="clock-seconds">00</h2>
+        </div>
+        <div class="btn">
+            <button class="btn-start">Start</button>
+            <button class="btn-pause">Pause</button>
+            <button class="btn-reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // state
+        let hours = 0;
+        let mins = 0;
+        let seconds = 0;
+
+        // hàm render 
+
+        function render(){
+            let clock = document.querySelector(`.clock`);
+            clock.innerHTML = ``;
+
+            let clockHour = document.createElement(`h2`);
+            clockHour.className = `clock-hour`;
+            clock.appendChild(clockHour);
+
+            let clockMin = document.createElement(`h2`);
+            clockMin.className = `clock-min`;
+            clock.appendChild(clockMin);
+
+            let clockSeconds = document.createElement(`h2`);
+            clockSeconds.className = `clock-seconds`;
+            clock.appendChild(clockSeconds);
+
+        }
+        
+        let a = setInterval(()=>{
+            let hours = new Date().getHours();
+            let seconds = new Date().getSeconds();
+            let mins = new Date().getMinutes();
+            let miliSeconds = new Date().getMilliseconds();
+            
+            console.log(hours , mins , seconds , miliSeconds);
+            
+        },1000) 
+        
+    </script>
+</body>
+</html>
