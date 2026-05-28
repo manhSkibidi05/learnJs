@@ -41,6 +41,8 @@
         let mins = 0;
         let seconds = 0;
 
+        let idInterval = null;
+
         // hàm render 
 
         function render(){
@@ -49,28 +51,68 @@
 
             let clockHour = document.createElement(`h2`);
             clockHour.className = `clock-hour`;
+            clockHour.textContent = `${String(hours).padStart(2 , `0`)} :`;
             clock.appendChild(clockHour);
 
             let clockMin = document.createElement(`h2`);
             clockMin.className = `clock-min`;
+            clockMin.textContent = `${String(mins).padStart(2 , `0`)} :`;
             clock.appendChild(clockMin);
 
             let clockSeconds = document.createElement(`h2`);
             clockSeconds.className = `clock-seconds`;
+            clockSeconds.textContent = String(seconds).padStart(2 , `0`);
             clock.appendChild(clockSeconds);
 
         }
-        
-        let a = setInterval(()=>{
-            let hours = new Date().getHours();
-            let seconds = new Date().getSeconds();
-            let mins = new Date().getMinutes();
-            let miliSeconds = new Date().getMilliseconds();
+
+        // Hàm thay đổi state
+        function runTime(){
+            if(!idInterval) return;
+            idInterval = setInterval(()=>{
+                seconds++;
+                if(seconds >= 60){
+                    seconds = 0;
+                    mins++;
+                } 
+                if(mins >= 60){
+                    mins = 0;
+                    hours++;
+                }
+                render();
+            },1000)
+        }
+
+        function pauseTime(){
+            if(idInterval){
+                clearInterval(idInterval);
+                idInterval = null;
+                render();
+            }
+        }
+
+        function resetTime(){
+            if(idInterval){
+                clearInterval(idInterval);
+                idInterval = null;
+            }
+            seconds = 0;
+            mins = 0;
+            hours = 0;
             
-            console.log(hours , mins , seconds , miliSeconds);
-            
-        },1000) 
+            render();
+        }
         
+        
+        // Sự kiện thay đổi state 
+        const btnStart = document.querySelector(`.btn-start`);
+        const btnPause = document.querySelector(`.btn-pause`);
+        const btnReset = document.querySelector(`.btn-reset`);
+
+        btnStart.addEventListener(`click` , () => { runTime()})
+        btnPause.addEventListener(`click` , () => { pauseTime()});
+        btnReset.addEventListener(`click` , () => { resetTime()});
+
     </script>
 </body>
 </html>
