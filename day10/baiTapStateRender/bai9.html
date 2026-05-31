@@ -68,7 +68,7 @@
 
         // Hàm thay đổi state
         function runTime(){
-            if(!idInterval) return;
+            if(idInterval) return;
             idInterval = setInterval(()=>{
                 seconds++;
                 if(seconds >= 60){
