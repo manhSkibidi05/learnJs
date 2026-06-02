@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .darkMode{
+            background-color: black;
+        }
+    </style>
+    <title>Bài 3</title>
+</head>
+<body>
+    
+    <script>
+        let isActive = true;
+        let btnSwitch = document.createElement('button');
+        btnSwitch.textContent = 'Đổi chế độ';
+        btnSwitch.addEventListener('click' , () => {
+            isActive = !isActive;
+            document.body.className = `${isActive ? 'darkMode' : ''}`
+        })
+        document.body.appendChild(btnSwitch)
+
+    </script>
+</body>
+</html>

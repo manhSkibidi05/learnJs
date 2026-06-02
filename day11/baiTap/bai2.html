@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2</title>
+</head>
+<body>
+    <div class="container"></div>
+    <script>
+        const products = [
+            {id : '1' , name : 'come' },
+            {id : '2' , name : 'my' },
+            {id : '3' , name : 'way' },
+        ]
+
+        const listMusic = `
+            <ul>
+                ${products.map(prd => `<li>${prd['name']}</li>`).join('')}
+            </ul>`
+        ;
+        let container = document.querySelector(`.container`);
+        container.innerHTML = listMusic;
+
+    </script>
+</body>
+</html>

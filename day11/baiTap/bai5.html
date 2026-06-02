@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 5</title>
+</head>
+<body>
+    <script>
+        const cart = [
+            {name : 'Nike air force 1' , price : 200 , quantity : 2},
+            {name : 'vanss' , price : 300 , quantity : 22},
+            {name : 'Jodan' , price : 1200 , quantity : 12},
+            {name : 'Nike low' , price : 2200 , quantity : 2},
+            {name : 'Convert' , price : 2002 , quantity : 12},
+        ]
+
+        const show = cart.map(shoe => `
+            <div>
+                <h2>Tên giày: ${shoe['name']}</h2>
+                <p>Số lượng : ${shoe['quantity']} </p>
+                <p>Tổng giá : ${shoe['quantity'] * shoe['price']}
+            </div>
+        `).join('');
+        
+        document.body.innerHTML = show;
+        
+    </script>
+</body>
+</html>
