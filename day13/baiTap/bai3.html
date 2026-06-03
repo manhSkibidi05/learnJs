@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3</title>
+</head>
+<body>
+    <!-- Bài 3 : short-circuit có điều kiện  -->
+    <script>
+        const users = [
+            {name : 'moy' , age :18 , address : {city : 'hà nội'}},
+            {name : 'nhàn' , age :18},
+            {name : '' , age :18},
+        ];
+
+        let sayHi = `
+            ${users.map(user => 
+                `<h1> Xin chào '${user?.name ?? 'người dùng'}' và ở ${user?.address?.city ?? 'vô định'}  </h1>`
+            ).join('')}
+        `
+        document.body.innerHTML = sayHi;
+        
+    </script>
+</body>
+</html>
