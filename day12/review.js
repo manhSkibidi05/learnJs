@@ -1,10 +1,10 @@
 // review về import/export 
 
-    // - import : giúp tải những giá trị được export ở các file khác
-    // - export : cho phép những giá trị này sử dụng ở file khác 
+    // - import : giúp nhập những giá trị được export ở các file khác
+    // - export : cho phép xuất những giá trị này sang ở file khác 
     // -> những giá trị export file này khi được import sang file khác và sử dụng nó
     
-    // - 2 kiểm export : 
+    // - 2 kiểu export : 
     // + export named : cho phép export nhiều giá trị (biến , hàm ..)
     // -> khi import sử dụng tên biến/hàm lúc export (có thể đổi bằng từ khóa 'as')
     // -> các giá trị đó nằm chung trong dấu '{}' , sau khi import xong có thể gọi ra và sử dụng 
