@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card sản phẩm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Container để demo - có thể chứa nhiều card */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* CARD SẢN PHẨM */
+        .product-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.03);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ẢNH sản phẩm */
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            background-color: #f8f9fa;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .image-wrapper {
+            overflow: hidden;
+            background: #fafafc;
+        }
+
+        .product-card:hover .card-image {
+            transform: scale(1.02);
+        }
+
+        /* Nội dung card */
+        .card-content {
+            padding: 1.2rem 1.2rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        /* Tiêu đề + danh mục */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.3;
+            margin-right: 0.5rem;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #eef2ff;
+            color: #1e40af;
+            padding: 0.25rem 0.7rem;
+            border-radius: 30px;
+            white-space: nowrap;
+        }
+
+        /* Giá */
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .product-price::before {
+            content: "₫";
+            font-size: 1rem;
+            font-weight: 500;
+            color: #3b82f6;
+        }
+
+        /* Mô tả */
+        .product-description {
+            font-size: 0.85rem;
+            line-height: 1.45;
+            color: #475569;
+            border-top: 1px solid #e9edf2;
+            padding-top: 0.7rem;
+            margin-top: 0.2rem;
+            display: -webkit-box;
+            line-clamp: 3;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Nút hành động (tuỳ chọn) */
+        .card-action {
+            margin-top: 0.6rem;
+        }
+
+        .btn-buy {
+            background: #1e293b;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.6rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-buy:hover {
+            background: #0f172a;
+        }
+
+        /* Responsive nhỏ */
+        @media (max-width: 640px) {
+            .products-grid {
+                gap: 1.2rem;
+            }
+            .card-content {
+                padding: 1rem;
+            }
+            .product-price {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="products-grid">
+        <!-- Card sản phẩm mẫu 1 -->
+        <div class="product-card">
+            <div class="image-wrapper">
+                <img class="card-image" src="https://placehold.co/400x400/3b82f6/white?text=Smart+Watch" alt="Sản phẩm đồng hồ thông minh">
+            </div>
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="product-title">Đồng hồ thể thao X1</span>
+                    <span class="product-category">Đồng hồ</span>
+                </div>
+                <div class="product-price">1.290.000</div>
+                <div class="product-description">
+                    Đồng hồ thông minh chống nước, theo dõi nhịp tim, đo SPO2, 10 ngày dùng pin. 
+                    Màn hình AMOLED 1.43 inch, dây silicon mềm mại.
+                </div>
+                <div class="card-action">
+                    <button class="btn-buy">Xem chi tiết →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card sản phẩm mẫu 2 -->
+        <div class="product-card">
+            <div class="image-wrapper">
+                <img class="card-image" src="https://placehold.co/400x400/ef4444/white?text=Túi+Da" alt="Túi da cao cấp">
+            </div>
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="product-title">Túi đeo chéo nam</span>
+                    <span class="product-category">Phụ kiện</span>
+                </div>
+                <div class="product-price">890.000</div>
+                <div class="product-description">
+                    Túi da thật hạng sang, thiết kế đa ngăn, chống trầy, phong cách tối giản,
+                    phù hợp đi làm, du lịch. Kích thước 24x18cm.
+                </div>
+                <div class="card-action">
+                    <button class="btn-buy">Xem chi tiết →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card sản phẩm mẫu 3 (thêm 1 sản phẩm nữa) -->
+        <div class="product-card">
+            <div class="image-wrapper">
+                <img class="card-image" src="https://placehold.co/400x400/10b981/white?text=Áo+Thun" alt="Áo thun nam">
+            </div>
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="product-title">Áo thun cotton basic</span>
+                    <span class="product-category">Thời trang</span>
+                </div>
+                <div class="product-price">250.000</div>
+                <div class="product-description">
+                    Chất liệu cotton 100% thoáng mát, co giãn nhẹ, form rộng unisex.
+                    7 màu cho bạn lựa chọn, in hình đơn giản.
+                </div>
+                <div class="card-action">
+                    <button class="btn-buy">Xem chi tiết →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

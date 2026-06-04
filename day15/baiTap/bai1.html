@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-color: black;
+            color:white;
+        }
+    </style>
+    <title>Bài 1</title>
+</head>
+<body>
+    <!--  Bài 1 : random user generator  -->
+    
+    <button class="load-new-user">Tải người dùng mới </button>
+    <div class="container">
+        <h1>Thông tin người dùng</h1>
+        <img src="" alt="">
+        <h2>Họ và tên :</h2>
+        <h2>Email : </h2>
+        <h2>Quốc gia :</h2>
+        <h2>Giới tính : </h2>
+    </div>
+    <script>
+        const container = document.querySelector('.container');
+
+        async function getData() {
+            container.innerHTML = '<h2>Đang tải...</h2>'
+            try {
+                const response = await fetch('https://randomuser.me/api/');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const user = data['results'][0];
+                console.log(user);
+                render(user['picture']['large'] , user['name']['first'] , user['email'] , user['location']['country'] , user['gender']);
+            } catch (err) {
+                container.innerHTML = `<h2>Đã có lỗi xảy ra : ${err.message}</h2>`;
+            }
+        }
+
+        function render(avt , hoTen , email , quocGia , gioiTinh){
+            container.innerHTML = `
+                <h1>Thông tin người dùng </h1>
+                <img src="${avt}" alt="">
+                <h2>Họ và tên : ${hoTen}</h2>
+                <h2>Email : ${email}</h2>
+                <h2>Quốc gia : ${quocGia}</h2>
+                <h2>Giới tính :${gioiTinh}</h2>
+            `
+        }
+
+        const btn = document.querySelector('.load-new-user');
+        btn.addEventListener('click' , () => {
+            getData();
+        })
+        
+        
+        
+    </script>
+</body>
+</html>
