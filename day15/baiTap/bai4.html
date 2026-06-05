@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4ff 0%, #d9e2ef 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* Card todo list chính */
+        .todo-card {
+            max-width: 700px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        /* Header */
+        .todo-header {
+            background: #1e293b;
+            padding: 1.5rem 2rem;
+            color: white;
+        }
+        .todo-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .todo-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        /* Form thêm task */
+        .search-task {
+            padding: 1.5rem 2rem 0.5rem 2rem;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #e9edf2;
+        }
+        .search-task input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 2rem;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .search-task input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        .search-task button {
+            background: #3b82f6;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+        .search-task button:hover {
+            background: #2563eb;
+        }
+
+        /* Danh sách task */
+        .task-list {
+            padding: 1rem 1.5rem 1.8rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        /* Mỗi item task */
+        .task-item {
+            background: #f8fafc;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.2s;
+            border: 1px solid #eef2ff;
+        }
+        .task-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        /* Thông tin task: ID + title */
+        .task-info {
+            flex: 5;
+            display: flex;
+            align-items: baseline;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .task-id {
+            background: #e2e8f0;
+            padding: 0.2rem 0.65rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #334155;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+        .task-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0f172a;
+            word-break: break-word;
+        }
+
+        /* Ô input đổi trạng thái (checkbox) */
+        .task-status {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .task-status label {
+            font-size: 0.75rem;
+            color: #475569;
+            cursor: pointer;
+        }
+        .task-status input {
+            width: 1.3rem;
+            height: 1.3rem;
+            cursor: pointer;
+            accent-color: #3b82f6;
+            margin: 0;
+        }
+
+        /* Khi task hoàn thành */
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+        .task-item.completed {
+            background: #f1f5f9;
+            opacity: 0.8;
+        }
+
+        /* Nút xóa 1 task */
+        .delete-task {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #cbd5e1;
+            transition: color 0.2s;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .delete-task:hover {
+            color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .task-actions {
+            padding: 0 1.8rem 1.8rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid #eef2ff;
+            margin-top: 0.2rem;
+        }
+        .task-count {
+            font-size: 0.75rem;
+            background: #eef2ff;
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            color: #1e40af;
+        }
+
+        /* scroll */
+        .task-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .task-list::-webkit-scrollbar-track {
+            background: #eef2ff;
+            border-radius: 10px;
+        }
+        .task-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            padding: 1.5rem;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        .modal-container p {
+            margin: 1rem 0;
+            color: #334155;
+            word-break: break-word;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-buttons button {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .btn-cancel:hover {
+            background: #cbd5e1;
+        }
+        .btn-confirm {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-confirm:hover {
+            background: #dc2626;
+        }
+    </style>
+    <title>Bài 4</title>
+</head>
+<body>
+    <div class="todo-card">
+        <div class="todo-header">
+            <h2>📋 Todo List · Card</h2>
+            <p>Mỗi task có ID riêng · Ô input để đổi trạng thái ✔️</p>
+        </div>
+
+        <div class="search-task">
+            <input disabled type="text" id="taskTitleInput" placeholder="Nhập tiêu đề công việc..." autocomplete="off">
+            <button id="addTaskBtn">+ Thêm task</button>
+        </div>
+
+        <div class="task-list" id="taskListContainer">
+            <!-- Các task sẽ được render bằng javascript -->
+        </div>
+
+        <div id="deleteModal" class="modal-overlay">
+            <div class="modal-container">
+                <h3>⚠️ Xác nhận xóa</h3>
+                <p id="modalTaskTitle">Bạn có chắc muốn xóa task này?</p>
+                <div class="modal-buttons">
+                    <button class="btn-cancel" id="modalCancelBtn">Hủy</button>
+                    <button class="btn-confirm" id="modalConfirmBtn">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let tasks = []
+        let page = 0;
+        let limit = 5;
+        let url = `https://jsonplaceholder.typicode.com/todos?_page=${page}&_limit=${limit}`;
+
+        const taskList = document.querySelector('.task-list')
+
+        async function getData(url){
+            taskList.innerHTML = '<h2>Đang lấy dữ liệu...</h2>';
+            try{
+                let response = await fetch(url);
+                if(!response.ok) throw new Error('Lỗi khi tải dữ liệu');
+                const values = await response.json();
+                tasks = [...tasks ,...values];
+                render();
+            }catch(err){
+                taskList.innerHTML = `<h2>${err.message}</h2>`;
+            }
+        }
+
+        function render(){
+            taskList.innerHTML = '';
+            
+            if(tasks.length === 0){
+                taskList.innerHTML = '<h2>Chưa có task nào</h2>';
+            }else{
+                for(let task of tasks){
+                    taskList.appendChild(createTaskElement(task))
+                }
+            }
+        }
+
+        function createTaskElement(task) {
+            const taskDiv = document.createElement('div');
+            taskDiv.className = 'task-item';
+            if (task.completed) taskDiv.classList.add('completed');
+            taskDiv.setAttribute('data-task-id', task.id);
+            
+            // task-info div
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'task-info';
+            
+            const idSpan = document.createElement('span');
+            idSpan.className = 'task-id';
+            idSpan.textContent = `#${task.id}`;
+            
+            const titleSpan = document.createElement('span');
+            titleSpan.className = 'task-title';
+            titleSpan.textContent = task.title;
+            
+            infoDiv.appendChild(idSpan);
+            infoDiv.appendChild(titleSpan);
+            
+            // task-status div
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'task-status';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'task-checkbox';
+            checkbox.setAttribute('data-id', task.id);
+            checkbox.checked = task.completed;
+            
+            const label = document.createElement('label');
+            label.textContent = task.completed ? 'Hoàn thành' : 'Chưa xong';
+            
+            statusDiv.appendChild(checkbox);
+            statusDiv.appendChild(label);
+            
+            // delete button
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-task';
+            delBtn.setAttribute('data-id', task.id);
+            delBtn.title = 'Xóa task';
+            delBtn.textContent = '✖';
+            delBtn.addEventListener('click' , () => {
+                openModel(task)
+            })
+
+            
+            taskDiv.appendChild(infoDiv);
+            taskDiv.appendChild(statusDiv);
+            taskDiv.appendChild(delBtn);
+            
+            return taskDiv;
+        }
+
+        function openModel(task){
+            const modal = document.getElementById('deleteModal');
+            const modalTitle = document.getElementById('modalTaskTitle'); 
+            const cancelBtn = document.getElementById('modalCancelBtn');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+
+            modalTitle.textContent = `Bạn có chắc muốn xóa task '${task.title}' này?`
+
+            modal.classList.add('active');
+            cancelBtn.addEventListener('click' , () => {
+                modal.classList.remove('active');
+            });
+            confirmBtn.addEventListener('click' , () => {
+                removeTask(task.id);
+                modal.classList.remove('active');
+            });
+        }
+        
+        function getTask(){
+            page++;
+            url = `https://jsonplaceholder.typicode.com/todos?_page=${page}&_limit=${limit}`;
+            getData(url);
+        }
+
+        function removeTask(id){
+            let taskRemoved = tasks.find(task => task?.id === id);
+            if(!taskRemoved) return;
+            tasks = tasks.filter(task => task?.id !== id);
+            render();
+        }
+
+        let btnGet = document.getElementById('addTaskBtn');
+        btnGet.addEventListener('click' , () => {
+            getTask()
+        })
+
+        render()
+        
+
+    </script>
+</body>
+</html>

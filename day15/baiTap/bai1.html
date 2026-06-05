@@ -16,12 +16,7 @@
     
     <button class="load-new-user">Tải người dùng mới </button>
     <div class="container">
-        <h1>Thông tin người dùng</h1>
-        <img src="" alt="">
-        <h2>Họ và tên :</h2>
-        <h2>Email : </h2>
-        <h2>Quốc gia :</h2>
-        <h2>Giới tính : </h2>
+        
     </div>
     <script>
         const container = document.querySelector('.container');
@@ -47,14 +42,15 @@
                 <h2>Họ và tên : ${hoTen}</h2>
                 <h2>Email : ${email}</h2>
                 <h2>Quốc gia : ${quocGia}</h2>
-                <h2>Giới tính :${gioiTinh}</h2>
+                <h2>Giới tính :${gioiTinh === 'male' ? 'Nam' : 'Nữ' }</h2>
             `
         }
 
         const btn = document.querySelector('.load-new-user');
         btn.addEventListener('click' , () => {
             getData();
-        })
+        });
+        getData();
         
         
         

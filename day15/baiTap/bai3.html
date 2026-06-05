@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .weather-dashboard {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #1e2a47;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .sub {
+            text-align: center;
+            color: #2c3e66;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(255,255,255,0.6);
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 0.4rem;
+        }
+
+        /* Grid card */
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        /* Card */
+        .weather-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            padding: 1.5rem 1.2rem 1.8rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,240,0.7);
+            text-align: center;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-8px);
+            background: white;
+            box-shadow: 0 30px 40px -16px rgba(0, 0, 0, 0.25);
+        }
+
+        .city-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #0f2b3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .city-name span {
+            font-size: 1.9rem;
+        }
+
+        .temperature {
+            font-size: 3.3rem;
+            font-weight: 800;
+            color: #f97316;
+            margin: 0.5rem 0;
+            letter-spacing: -2px;
+        }
+        .temp-unit {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #f97316;
+        }
+
+        .weather-details {
+            margin-top: 1.2rem;
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.2rem 0.5rem;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .detail-label {
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .detail-value {
+            font-weight: 700;
+            color: #0f172a;
+            background: #eef2ff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .loading, .error {
+            text-align: center;
+            background: rgba(255,255,245,0.9);
+            padding: 1rem;
+            border-radius: 2rem;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        .error {
+            color: #b91c1c;
+            background: #fee2e2;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            color: #1e2a47;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 700px) {
+            .weather-card {
+                width: 280px;
+                padding: 1.2rem;
+            }
+            .temperature {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+    <title>Bài 3</title>
+</head>
+<body>
+    <div class="weather-dashboard">
+        <h1>🌤️ Thời tiết của thành phố</h1>
+        <div style="text-align: center; margin-bottom: 30px;">
+            <select name="" id="select-city">
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+                <option value="Hồ Chí Minh">TP.Hồ Chí Minh</option>
+            </select>
+        </div>
+
+        <div class="cards-container" id="weatherContainer">
+            <!-- card mẫu loading -->
+            <div class="weather-card loading-card">
+                <div class="city-name">📍 Đang tải...</div>
+                <div class="temperature">--</div>
+                <div class="weather-details">
+                    <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                </div>
+            </div>
+        </div>
+        <footer>Dữ liệu từ Open-Meteo (cập nhật realtime)</footer>
+    </div>
+    <script>
+        let card = document.querySelector('.weather-card');
+
+        const cities = [
+            { name: "Hà Nội", lat: 21.0285, lon: 105.8542 },
+            { name: "Đà Nẵng", lat: 16.0544, lon: 108.2022 },
+            { name: "Hồ Chí Minh", lat: 10.8231, lon: 106.6297 }
+        ];
+
+        let url =`https://api.open-meteo.com/v1/forecast?latitude=0&longitude=0&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto`;
+
+        async function getWeather(url , name){
+            card.innerHTML = `
+                <div class="city-name">📍 Đang tải...</div>
+                <div class="temperature">--</div>
+                <div class="weather-details">
+                    <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                </div>
+            `
+            try{    
+                let res = await fetch(url);
+                if(!res.ok) throw new Error('Lỗi khi tải dữ liệu');
+                let values = await res.json();
+                console.log(values)
+                render(values , name);
+            }catch(err){
+                card.innerHTML = `
+                <div class="city-name">📍${err.message} </div>
+                <div class="temperature">--</div>
+                <div class="weather-details">
+                    <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                </div>
+            `
+            }
+        }
+
+        function render(city , name){
+            card.innerHTML = `
+                <div class="city-name">📍 ${name}</div>
+                <div class="temperature">${city?.current_weather?.temperature}</div>
+                <div class="weather-details">
+                    <div class="detail-item"><span>Mã thời tiết</span><span>${city?.current_weather?.weathercode}</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>${city?.current_weather?.windspeed}</span></div>
+                </div>
+            `;
+        }
+
+        function changeCity(nameCity){
+            let cityValue = cities.find(city => city?.name === nameCity);
+            if(!cityValue) return;
+            url =`https://api.open-meteo.com/v1/forecast?latitude=${cityValue?.lat}&longitude=${cityValue?.lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&timezone=auto`;
+            getWeather(url , cityValue?.name);
+        }
+
+        let select = document.getElementById('select-city');
+        select.addEventListener('change' , (e) => {
+            changeCity(e.target.value)
+        })
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 5</title>
+</head>
+<body>
+    
+    <script>
+        async function getData(url){
+            
+            try{
+                let response = await fetch(url);
+                if(!response.ok) throw new Error('Lỗi khi tải dữ liệu');
+                const values = await response.json();
+                console.log(values)
+                // render();
+            }catch(err){
+                
+            }
+        }
+        getData('https://api.github.com/users/manhSkibidi05')
+    </script>
+</body>
+</html>

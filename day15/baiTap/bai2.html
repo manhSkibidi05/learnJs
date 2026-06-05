@@ -214,10 +214,11 @@
         
     </div>
     <script>
+        let productsAll = [];
+        let keyWord = '';
+
         let container = document.querySelector('.products-grid');
         let search = document.getElementById('search-input');
-
-        let keyWord = '';
 
         async function getProduct(url){
             container.innerHTML = '<h2> Đang chờ ...</h2>';
@@ -225,6 +226,7 @@
                 let res = await fetch(url);
                 if(!res.ok) throw new Error(`Lỗi http : ${url}`);
                 let datas = await res.json();
+                productsAll = datas;
                 render(datas);
             }catch(err){
                 container.innerHTML = `<h2> ${err.message}</h2>`;
@@ -241,8 +243,7 @@
             if(productsFilter.length === 0){
                 container.innerHTML = '<h2> Không tồn tại sản phẩm ! </h2>'
             }else{
-                for(let prd of productsFilter){
-                container.innerHTML+=`
+                container.innerHTML = productsFilter.map(prd => `
                 <div class="product-card">
                     <div class="image-wrapper">
                         <img class="card-image" src="${prd?.image}" alt="Sản phẩm đồng hồ thông minh">
@@ -252,7 +253,7 @@
                             <span class="product-title">${prd?.title}</span>
                             <span class="product-category">${prd?.category}</span>
                         </div>
-                        <div class="product-price">${prd?.price}</div>
+                        <div class="product-price">$ ${prd?.price}</div>
                         <div class="product-description">
                             ${prd?.description}
                         </div>
@@ -261,15 +262,14 @@
                         </div>
                     </div>
                 </div>
-                `
-                }
+                `).join('');
             }
             
         }
 
         function searchInput(value){
             keyWord = value;
-            getProduct('https://fakestoreapi.com/products')
+            render(productsAll);
         }
 
         function debounce(func){
@@ -282,8 +282,10 @@
             }
         }
 
+        const debouceInput = debounce(searchInput)
         search.addEventListener('input' , (e) => {
-            debounce(searchInput)(e.target.value)
+            container.innerHTML = '<h2>Đang tìm kiếm sản phẩm... </h2>'
+            debouceInput(e.target.value)
         });
 
         getProduct('https://fakestoreapi.com/products')
