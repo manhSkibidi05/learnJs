@@ -303,7 +303,7 @@
 
         <div class="search-task">
             <input disabled type="text" id="taskTitleInput" placeholder="Nhập tiêu đề công việc..." autocomplete="off">
-            <button id="addTaskBtn">+ Thêm task</button>
+            <button id="addTaskBtn"> Tải thêm task</button>
         </div>
 
         <div class="task-list" id="taskListContainer">
@@ -409,23 +409,7 @@
             return taskDiv;
         }
 
-        function openModel(task){
-            const modal = document.getElementById('deleteModal');
-            const modalTitle = document.getElementById('modalTaskTitle'); 
-            const cancelBtn = document.getElementById('modalCancelBtn');
-            const confirmBtn = document.getElementById('modalConfirmBtn');
-
-            modalTitle.textContent = `Bạn có chắc muốn xóa task '${task.title}' này?`
-
-            modal.classList.add('active');
-            cancelBtn.addEventListener('click' , () => {
-                modal.classList.remove('active');
-            });
-            confirmBtn.addEventListener('click' , () => {
-                removeTask(task.id);
-                modal.classList.remove('active');
-            });
-        }
+        
         
         function getTask(){
             page++;
@@ -443,9 +427,28 @@
         let btnGet = document.getElementById('addTaskBtn');
         btnGet.addEventListener('click' , () => {
             getTask()
-        })
+        });
 
-        render()
+        const modal = document.getElementById('deleteModal');
+        const modalTitle = document.getElementById('modalTaskTitle');
+        
+        function openModel(task){
+            modalTitle.textContent = `Bạn có chắc muốn xóa task '${task.title}' này?`
+            modal.classList.add('active');
+        }
+
+        const cancelBtn = document.getElementById('modalCancelBtn');
+        const confirmBtn = document.getElementById('modalConfirmBtn');
+        
+        cancelBtn.addEventListener('click' , () => {
+            modal.classList.remove('active');
+        });
+        confirmBtn.addEventListener('click' , () => {
+            removeTask(task.id);
+            modal.classList.remove('active');
+        });
+
+        render();
         
 
     </script>

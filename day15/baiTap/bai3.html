@@ -184,14 +184,14 @@
             <!-- card mẫu loading -->
             <div class="weather-card loading-card">
                 <div class="city-name">📍 Đang tải...</div>
-                <div class="temperature">--</div>
+                <div class="temperature">--°C</div>
                 <div class="weather-details">
                     <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
-                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió km/h</span><span>---</span></div>
                 </div>
             </div>
         </div>
-        <footer>Dữ liệu từ Open-Meteo (cập nhật realtime)</footer>
+        <footer>Dữ liệu từ Open-Meteo (cập nhật realtime) , </footer>
     </div>
     <script>
         let card = document.querySelector('.weather-card');
@@ -207,10 +207,10 @@
         async function getWeather(url , name){
             card.innerHTML = `
                 <div class="city-name">📍 Đang tải...</div>
-                <div class="temperature">--</div>
+                <div class="temperature">--°C</div>
                 <div class="weather-details">
                     <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
-                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió km/h</span><span>---</span></div>
                 </div>
             `
             try{    
@@ -222,10 +222,10 @@
             }catch(err){
                 card.innerHTML = `
                 <div class="city-name">📍${err.message} </div>
-                <div class="temperature">--</div>
+                <div class="temperature">--°C</div>
                 <div class="weather-details">
                     <div class="detail-item"><span>Mã thời tiết</span><span>---</span></div>
-                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>---</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió km/h</span><span>---</span></div>
                 </div>
             `
             }
@@ -237,7 +237,7 @@
                 <div class="temperature">${city?.current_weather?.temperature}</div>
                 <div class="weather-details">
                     <div class="detail-item"><span>Mã thời tiết</span><span>${city?.current_weather?.weathercode}</span></div>
-                    <div class="detail-item"><span>🍃 Tốc độ gió</span><span>${city?.current_weather?.windspeed}</span></div>
+                    <div class="detail-item"><span>🍃 Tốc độ gió km/h</span><span>${city?.current_weather?.windspeed}</span></div>
                 </div>
             `;
         }

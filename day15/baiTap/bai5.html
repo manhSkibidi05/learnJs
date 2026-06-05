@@ -3,24 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .github-card {
+            max-width: 750px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub {
+            text-align: center;
+            color: #cbd5e6;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Container tìm kiếm với dropdown */
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-area {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-area input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border: none;
+            border-radius: 3rem;
+            background: #ffffffdd;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .search-area input:focus {
+            background: white;
+            box-shadow: 0 0 0 4px rgba(253, 160, 133, 0.4);
+        }
+
+        .search-area button {
+            background: linear-gradient(95deg, #f6d365, #fda085);
+            border: none;
+            padding: 0 2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #1e2a3a;
+        }
+
+        .search-area button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px rgba(253,160,133,0.5);
+        }
+
+        /* Dropdown gợi ý */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 1.2rem;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            border: 1px solid rgba(255,255,245,0.2);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        }
+
+        .suggestion-item {
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(253, 160, 133, 0.2);
+        }
+
+        .suggestion-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .suggestion-login {
+            font-weight: 600;
+            color: #fda085;
+        }
+
+        .suggestion-name {
+            font-size: 0.8rem;
+            color: #cbd5e6;
+            margin-left: 8px;
+        }
+
+        /* Loading spinner */
+        .loader {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 5px solid rgba(255,255,255,0.2);
+            border-top: 5px solid #fda085;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Profile card kết quả */
+        .profile-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 1.8rem;
+            padding: 1.8rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255,255,245,0.2);
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,240,0.2);
+            padding-bottom: 1.2rem;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fda085;
+            box-shadow: 0 12px 18px -8px rgba(0,0,0,0.3);
+        }
+        .name-section h2 {
+            font-size: 1.8rem;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .name-section .login {
+            color: #fda085;
+            font-weight: 500;
+            margin-top: 6px;
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+        }
+        .bio {
+            margin: 1rem 0;
+            font-style: italic;
+            color: #cbd5e6;
+            background: rgba(0,0,0,0.2);
+            padding: 0.6rem 1rem;
+            border-radius: 1rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .info-item {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0.7rem 1rem;
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .info-item .emoji { font-size: 1.6rem; }
+        .info-item .text { font-weight: 500; color: #f1f5f9; }
+        .info-item .text span { font-weight: 300; font-size: 0.8rem; color: #cbd5e6; }
+        .repo-stats {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .stat-badge {
+            background: #0f172ad9;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #fda085;
+        }
+        .github-link {
+            margin-top: 1.2rem;
+            text-align: center;
+        }
+        .github-link a {
+            color: #fda085;
+            text-decoration: none;
+            font-weight: bold;
+            background: rgba(0,0,0,0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+        }
+        .github-link a:hover {
+            background: #fda085;
+            color: #0f172a;
+        }
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            border-left: 5px solid #ef4444;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            color: #ffdddd;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        @media (max-width: 550px) {
+            .github-card { padding: 1.2rem; }
+            .profile-header { flex-direction: column; text-align: center; }
+            .info-item { justify-content: center; }
+        }
+    </style>
     <title>Bài 5</title>
 </head>
 <body>
-    
-    <script>
-        async function getData(url){
-            
+    <div class="github-card">
+        <h1>🐙 GitHub Profile Explorer</h1>
+        <div style="text-align: center;"><div class="sub">Gõ username → gợi ý tự động</div></div>
+
+        <div class="search-container">
+            <div class="search-area">
+                <input type="text" id="usernameInput" placeholder="Ví dụ: octocat, torvalds, gaearon..." autocomplete="off">
+                <button id="searchBtn">🔍 Tìm kiếm</button>
+            </div>
+            <div id="suggestionsDropdown" class="suggestions-dropdown" style="display: none;"></div>
+        </div>
+
+        <div id="resultContainer">
+            <!-- Kết quả profile sẽ hiển thị ở đây -->
+        </div>
+        <footer>Dữ liệu từ GitHub API | Gợi ý khi gõ với debounce</footer>
+    </div>
+    <script>    
+        const result = document.getElementById('resultContainer');
+        const inputSearch = document.getElementById('usernameInput');
+        const btnSearch = document.getElementById('searchBtn');
+
+        function showError(err){
+            result.innerHTML = `<div class="error-message">⚠️ ${err}</div>`;
+        }
+
+        function showLoading() {
+            resultContainer.innerHTML = `
+                <div class="loader">
+                    <div class="spinner"></div>
+                </div>
+                <div style="text-align:center; color:#cbd5e6;">Đang tra cứu thông tin trên GitHub...</div>
+            `;
+        }
+
+        async function fetchProfileGithub(url){
+            showLoading();
             try{
                 let response = await fetch(url);
-                if(!response.ok) throw new Error('Lỗi khi tải dữ liệu');
-                const values = await response.json();
-                console.log(values)
-                // render();
+                if(!response.ok) throw new Error('Username không tồn tại !');
+                const user = await response.json();
+                console.log(user)
+                renderUser(user);
             }catch(err){
-                
+                showError(err.message)
             }
         }
-        getData('https://api.github.com/users/manhSkibidi05')
+        
+
+        function renderUser(user){
+            if(!user) return;
+            const name = user.name || user.login;
+            const avt = user.avatar_url;
+            const bio = user?.bio ?? 'Không có tiêu sử';
+            const company = user?.company ?? 'Không có công ty';
+            const location = user?.location ?? 'Không có địa chỉ';
+            const blog = user?.blog ?? 'Không có blog';
+            const twitter = user?.twitter_username ? `@${user.twitter_username}` : 'Không có twitter';
+
+            const profileHtml = `
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img class="avatar" src="${avt}" alt="avatar">
+                    <div class="name-section">
+                        <h2>${name}</h2>
+                        <div class="login">@${user.login}</div>
+                    </div>
+                </div>
+                ${user.bio ? `<div class="bio">📝 ${bio}</div>` : ''}
+                <div class="repo-stats">
+                    <span class="stat-badge">📦 ${user.public_repos} repositories</span>
+                    <span class="stat-badge">👥 ${user.followers} followers</span>
+                    <span class="stat-badge">🔁 ${user.following} following</span>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item"><div class="emoji">🏢</div><div class="text"><span>Công ty</span><br>${company}</div></div>
+                    <div class="info-item"><div class="emoji">📍</div><div class="text"><span>Địa điểm</span><br>${location}</div></div>
+                    ${blog ? `<div class="info-item"><div class="emoji">🔗</div><div class="text"><span>Website/Blog</span><br><a href="${blog}" target="_blank" style="color:#fda085; text-decoration:none;">${blog.replace(/^https?:\/\//, '')}</a></div></div>` : ''}
+                    ${twitter ? `<div class="info-item"><div class="emoji">🐦</div><div class="text"><span>Twitter</span><br>${twitter}</div></div>` : ''}
+                </div>
+                <div class="github-link">
+                    <a href="${user.html_url}" target="_blank">📂 Xem GitHub profile →</a>
+                </div>
+            </div>
+            `;
+            result.innerHTML = profileHtml;
+        }
+
+        btnSearch.addEventListener('click' , () => {
+            if(inputSearch.value.trim() === ''){
+                showError('Hãy nhập username !');
+                return;
+            }
+            fetchProfileGithub(`https://api.github.com/users/${inputSearch.value.trim()}`);
+        });
+
+
+
+
+
+        fetchProfileGithub('https://api.github.com/users/octocat'); 
     </script>
 </body>
 </html>
