@@ -144,9 +144,32 @@
     // -> lúc định nghĩa 1 component cần gán địa chỉ của hàm sẽ chạy sau khi diễn ra sự kiện onClick = {funcActive}
     // -> khi gọi 1 component cần truyền vào hàm sẽ xảy ra onClick = {() => console.log(a)}
     
+// Tự kiểm tra kiến thức 
 
+// 1. Tại sao React được gọi là 'Thư viện' mà không phải framework ?
+    // - React chỉ tập chung vào xây dựng giao diện người dùng (UI) thông qua cơ chế component
+    // - Nó không áp đặt cấu trúc toàn bộ ứng dụng (không có router , không có cách tổ chức state toàn cục , không có http client...)
+    // - Người dùng hoàn toàn có thể thêm tự do các thư viện bổ sung (React Router , Redux , Axios...) để hoàn thiện ứng dụng
+    // - Framework (angular) thường đi kèm nhiều thành phần có sẵn và quy định cách viết code 
 
+// 2. JSX khác HTML ở điểm nào ? kể ít nhất 3 điểm
+    // 1. Có thể nhúng bất cứ biểu thức nào trong js trong dấu {} -> biểu thức chạy được bên js sẽ hoàn toàn chạy được trong jsx nếu nằm trong dấu {} này
+    // 2. Tên các thuộc tính của 1 thẻ html đều phải dùng camelCase
+    // 3. Có thể tạo ra thẻ tùy chỉnh dựa và việc định nghĩa component và truyền props(obj chứa thuộc tính của thẻ tùy chỉnh) và bắt buộc viết hoa chữ cái đầu tiên nếu là 1 component
+    // 4. Với các thẻ không có thẻ đóng trong html thì sang jsx sẽ có dấu đóng thẻ vd : <img... />
+    // 5. Fragment (<>...</>) thẻ rỗng không có tên cho phép khi định nghĩa component cần trả về nhiều phần tử mà không muốn bọc trong div 
+    // 6. Style inline nhận obj khi cần định nghĩa style inline cho 1 thẻ cần truyền vào là 1 obj với tên style tuân theo quy tắc camelCase và giá trị là chuỗi
+    
 
+// 3. Làm thế nào để nhúng 1 biến JavaScript vào trong JSX ? 
+// -> sử dụng dấu {} rồi đặt tên biến vào trong 
+
+// 4. Component trong react nhận đầu vào là gì ? có thể thay đổi đầu vào đó trong component được không ?
+// -> component trong react nhận đầu vào là 1 đối tượng props 
+// -> không thể dổi đầu vào đó trong component 
+
+// 5. props.children dùng để làm gì ? 
+// -> là một thuộc tính của props đóng vai trò định nghĩa các phần tử con trong thẻ component
 
 
 

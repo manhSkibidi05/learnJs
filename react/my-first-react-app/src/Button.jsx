@@ -2,9 +2,10 @@
     // + Button nhận props label và onclick 
     // + Khi click nút , gọi onClick và hiện thị 'button clicked'
 
-    function Button({label , onClick}){
-        return <button onClick={onClick} >{label}</button>
+    function Button({label , func}){
+        return <button onClick={func} >{label}</button>
         
     }
     export default Button
 
+    
