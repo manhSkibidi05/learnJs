@@ -124,3 +124,26 @@
             </form>
         )
     }
+
+    // - Tự kiểm tra kiến thức ngày 2 : 
+    // 1. State và props khác nhau như thế nào ? 
+        // - State là biến cục bộ sử dụng trong function component và có thể thay đổi giá trị dựa trên hàm setState 
+        // - props là tham số được truyền vào function component chỉ có thể lấy các giá trị của props ra sử dụng chứ không thay đổi các giá trị đó 
+
+    // 2. Tại sao không thể gán trực tiếp state = newValue mà phải dùng setState ?
+        // - Nếu gán trực tiếp state = newValue nhưng trên trình duyệt lại không cập nhật lại giao diện dựa trên giá trị của state
+        // -> việc dùng setState vì để đảm bảo khi state thay đổi giá trị sẽ gọi lại chính component function này để render lại giao diện dựa trên state mới 
+    
+    // 3. Controlled component là gì ? lợi ích ? 
+        // - là một thành phần form (input , textarea , select) mà giá trị hiện thị được điều khiển hoàn toàn bởi state của react
+            // + Giá trị input được lấy từ state -> từ giá trị state cập nhật lại về value của input hoặc checked
+            // + Mỗi khi người dùng thay đổi input -> kích hoạt sự kiện onChange rồi gọi hàm setState để cập nhật state rồi re-render function component
+            // + React là nguồn sự thật duy nhất 
+        
+        // - Lợi ích : 
+            // + Đồng bộ dữ liệu : Giá trị hiển thị trên web luôn đồng bộ với state 
+            // + validation realtime : Kiểm tra lỗi ngay khi ngừi dùng đang nhập
+            // + Dễ reset hoặc set giá trị mặc định : Khi rơi vào các trường hợp cần reset chỉ cần gọi setState
+            // + Dễ chuyển đổi hoặc format dữ liệu : viết hoa chữ cái đầu , định dạng sdt
+            // + Tương thích với các  logic khác : kết hợp useEffect , validation library...
+
