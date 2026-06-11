@@ -70,4 +70,16 @@
         // -> khi re-render lại component không làm thay đổi DOM element nó chỉ thay đổi những giá trị do state được đọc 
         
         
+// - React được chia thành 2 vùng viết code trong file .jsx 
+    // + vùng 1 : Cho phép viết mã JavaScript thoải mái 
+    // -> vùng này ở bất kì đâu trên file .jsx  không ở trong mã jsx
 
+    // + vùng 2 : Cho phép viết mã JSX là mã giống html  các thẻ là báo hiệu cho bắt đầu vùng jsx 
+    // ->  vùng này ở bất kì đâu trên file .jsx và nếu muốn viết mã js trong vùng jsx thì cần nhúng qua dấy {}
+
+    // + các loại giá trị js có thẻ nhúng vào trong vùng jsx (các thẻ giống html) : 
+        // - các biến , mảng , hàm , obj , biểu thức 
+        // - mã jsx 
+        // - mảng các mã jsx 
+
+    
