@@ -39,13 +39,13 @@ h1 {
     border-radius: 4px;
 }
 
-.filter-section {
+.filterSection {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.filter-section button {
+.filterSection button {
     flex: 1;
     padding: 8px;
     border: none;
@@ -54,7 +54,7 @@ h1 {
     border-radius: 4px;
 }
 
-.filter-section button.active {
+.filterSection button.active {
     background: #007bff;
     color: white;
 }

@@ -199,3 +199,13 @@
 
         // 3. Làm thể nào tạo local css trong react mà không bị xung đột 
         // + tạo file .module.css sau đó import vào cho các component sử dụng 
+
+    // 6. Lưu ý
+
+    // - styles.tênClass -> trả 1 chuỗi là tên class độc nhất đã được tạo bởi React 
+        // + tên class độc nhất tránh việc trùng tên class 
+        // + 1 phần tử JSX có thể có nhiều className bằng cách nối chuỗi
+
+    // - state chỉ lưu dữ liệu cần thiết 
+        // + những dữ liệu có thể tính toán được từ state có sẵn thì không nên lưu vào state
+        // -> khi muốn lọc dữ liệu state hãy tạo biến mới lưu trữ dữ liệu đã lọc và render dữ liệu lọc này

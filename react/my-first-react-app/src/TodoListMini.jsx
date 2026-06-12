@@ -11,6 +11,13 @@
         // -> ptu sau là setState cho phép thay đổi giá trị state rồi re-render lại component 
         const [tasks , setTasks] = useState([]);
         const [text , setText] = useState('');
+        const [filter , setFilter] = useState('all');
+
+        const tasksFilter = tasks.filter(task => {
+            if(filter === 'completed') return task.completed === true;
+            if(filter === 'waiting') return task.completed === false;
+            return true;
+        })
 
         // hàm thêm phần tử mới vào state tasks
         function addTask(value){
@@ -44,6 +51,8 @@
             setTasks(tasks.filter(val => val.id !== id))
         }
 
+        
+
         // - state chỉ dùng để đọc và gán cho các thuộc tính cần để hiện thị giao diện
         // - muốn thay đổi dùngg hoàn toàn = setState để có thể cập nhật giá trị nhanh và chuẩn xác nhất 
 
@@ -55,16 +64,25 @@
                     <input id='todoInput' placeholder='Nhập công việc mới...' type="text" value={text} onChange={(e) => setText(e.target.value)} />
                     <button id='addBtn' onClick={() => addTask(text)}>Thêm</button>
                 </div>
+
+                <div className={styles.filterSection}>
+                    <button onClick={() => setFilter('all')}  className={filter === 'all' ? styles.active : ''}>Tất cả</button>
+                    <button onClick={() => setFilter('completed')} className={filter === 'completed' ? styles.active : ''}>Hoàn thành</button>
+                    <button onClick={() => setFilter('waiting')} className={filter === 'waiting' ? styles.active : ''}>Chưa làm</button>
+                </div>
                 
                 <ul id='todoList'>
-                    {
-                        // nhúng js và kết hợp với mã jsx trả về 1 mảng jsx -> vì bên trong {} vẫn có thể viết mã jsx và js
-                        tasks.map(task =>  
-                            <div className={styles.todoItem} key={task.id}>
+                    {   
+                        tasksFilter.length === 0 ? 
+                        ( <h2 style={{color:'red'}}>Danh sách rỗng</h2> ) : 
+                        (
+                            tasksFilter.map(task =>  
+                            <div className={`${styles.todoItem} ${task.completed ? styles.completed :'' }`}  key={task.id}>
                                 <input type="checkbox" checked={task.completed} onChange={() => updateChecked(task.id)}/>
                                 <span>{task.title}</span>
                                 <button className={styles.deleteBtn} onClick={() => removeTask(task.id)}>Xóa</button>
                             </div>
+                            )
                         )
                     }
                 </ul>
