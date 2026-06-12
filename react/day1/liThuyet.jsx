@@ -20,16 +20,10 @@
         // -> React dựa trên dữ liệu được cung cấp trên state mà sẽ hiện thị giao diện phù hợp với state đó và khi state thay đổi giao diện thay đổi động theo 
 
 // 2. Cài môi trường 
-    import React from 'react'
-    import ReactDOM from 'react-dom/client'
-    import App from './App.jsx'
-    import './index.css'
-
-    ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
-    );
+    // npm create vite@latest my-first-react-app -- --template react
+    // cd my-first-react-app
+    // npm install
+    // npm run dev
 
 // 3. JSX - cú pháp đặc biệt của react 
     // - JSX giống như việc viết html trong Js . Nhưng có một số điểm khác biệt quan trọng 

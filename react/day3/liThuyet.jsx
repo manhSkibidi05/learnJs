@@ -134,4 +134,68 @@
             // + Chỉ nên dùng css module cho các component không dùng cho style toàn cục (vd : reset CSS). Vẫn có thể dùng file .css thông thường import vào main.jsx
             // + Vite , Create React App đều hỗ trợ CSS modules mặc định 
 
-    // 4. Thực hành 
+    // 4. Kiến thức chi tiết 
+
+    // 1. Tại sao dùng map() không dùng các phương thức khác của mảng ? và mảng  JSX được chuyển thành các phần tử con như thế nào
+        // a) tại sao ưu tiên map()
+            // - phương thức phổ biến nhất biến đổi 1 mảng dữ liệu thành mảng JSX 
+            // - nó duy trì cùng số lượng phần tử và trả về mảng mới với độ dài tương ứng với số phần tử ban đầu
+            // - code ngắn hơn các phương thức khác forEach() , reduce()
+
+        // b) làm thế nào mảng JSX được chuyển thành các phần tử con 
+            // - Khi bạn nhúng 1 mảng phần tử JSX vào trong phần tử JSX 
+            // -> React tự duyệt mảng và hiện thị từng phần tử như các node con 
+
+    // 2. Thuộc tính key - Chỉ cần khi tạo mảng các phần tử JSX ? tại sao ?
+        // a) Đúng , key chỉ cần khi bạn render mảng các phần tử JSX (cùng loại)
+            // - Trong react khi bạn có mảng các component hoặc thẻ HTML giống nhau , React cần key dể phân biệt chúng trong quá trình reconciliation (so sánh virtual DOM)
+        
+        // b) Tại sao key quan trọng 
+            // - Hiệu năng : nếu không có key khi thay đổi mảng (thêm , xóa ..) React phá hủy và tạo lại nhiều DOM element thay vì tái sử dụng
+            // - Tránh lỗi state : nếu component con có state riêng (input , checkbox) việc không có key có thể gây giữ sai state khi thứ tự thay đổi
+
+        // c) Khi nào không cần key
+            // - Nếu mảng chỉ có 1 phần tử duy nhất
+            // - Nếu bạn render mảng các phần tử không có state nội bộ và không có thứ tự thay đổi
+            // -> tuy nhiên thực tế luôn thêm key là thói quen tốt tránh lỗi ẩn khi tạo mảng phần tử JSX 
+    
+    // 3. CSS inline : tại sao dùng obj ? và đặt tên .module.css có tác dụng gì ? 
+        // a) CSS inline dùng obj - lý do 
+            // - style inline trong JSX là js thuần không phải chuỗi css . Do đó , bạn phải dùng object với các thuộc tính viết theo camelCase
+            // - React chuyển obj đó thành chuỗi style HTML hợp lệ 
+
+            // - Lợi ích :
+                // + có thể tính toán style động dễ dàng 
+                // + không xung đột tên class
+                // + tích hợp với js (dùng biến , ternary)
+            
+            // - Bất lợi : Khó viết pseudo-classes và media queries . Khi cần những thứ đó nên dùng css module hoặc styled-components
+        
+        // b) Tại sao đặt tên .module.css ? tác dụng khi import như obj ? 
+            // - css modules (file .module.css) giúp local scope class names . Khi bạn import file css module
+
+            import styles from './button.module.css'
+            // - styles là obj ánh xạ từ tên class gốc đến tên class duy nhất ra build tool tạo ra 
+
+            // - Cơ chế hoạt động : 
+                // 1. vite nhận diện file .module.css
+                // 2. Nó đọc các tên class có trong file sau đó tạo tên mới duy nhất cho mỗi class 
+                // 3. Xuất obj {tênbandau : 'tênmoiduynhat'}
+                // 4. Bạn dùng className={styles.tenbandau} -> phần tử JSX sẽ mang class name của tên mới duy nhất và các style của class này
+            
+            // - Lợi ích :
+                // - Không lo xung đột tên class giữa các component 
+                // - vẫn dùng được css thuần (pseudo-classes , media queries)
+                // - dễ bảo trì và tái sử dụng 
+
+    // 5. Tự kiểm tra kiến thức 
+        
+        // 1. Tại sao cần key khi render danh sách ? 
+        // - Khi render danh sách JSX cần thuộc tính key vì giúp cho React dễ dàng quản lí các phần tử hơn khi thực hiện các thao tác thêm , sửa ,xóa
+
+        // 2. Sự khác nhau giữa ternary và && trong conditional rendering
+        // + ternary : render ra sẽ có 2 trường hợp đúng và sai 
+        // + && : chỉ khi 2 biểu thức 2 bên dấu && đều trả về truly thì mới render ra biểu thức 1 
+
+        // 3. Làm thể nào tạo local css trong react mà không bị xung đột 
+        // + tạo file .module.css sau đó import vào cho các component sử dụng 

@@ -6,7 +6,8 @@ import Counter from './Counter.jsx';
 import Student from './StudentForm.jsx';
 import Note from './Note.jsx';
 import TodoList from './TodoListMini.jsx';
-import DataFetcher from './DataFetcher.jsx'
+import DataFetcher from './DataFetcher.jsx';
+import ProductList from './ProductList.jsx'
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -24,16 +25,24 @@ function App(){
         <Button label='Dont click me' func={() => alert('fah')} />
         <UserCard avt='https://randomuser.me/api/portraits/women/68.jpg' name='A long' role='Admin' email='moy@gaming.com'></UserCard>
         <br />
-        <Counter></Counter>
+        
         <br />
         <Student></Student>
         <Note></Note> */}
+        <Counter></Counter>
+        <br />
         <TodoList></TodoList>
         <br />
         <DataFetcher></DataFetcher>
+        <br />
+        <ProductList></ProductList>
       </div>
     );
   }
 
   export default App;
-
+// {id : 1 , name : 'Iphone 11' , price : 101},
+//             {id : 2 , name : 'Iphone 12' , price : 15},
+//             {id : 3 , name : 'Iphone 13' , price : 131},
+//             {id : 4 , name : 'Iphone 14' , price : 1},
+//             {id : 5 , name : 'Iphone 15' , price : 1012},
