@@ -5,7 +5,8 @@ import UserCard from './UserCard.jsx';
 import Counter from './Counter.jsx';
 import Student from './StudentForm.jsx';
 import Note from './Note.jsx';
-import TodoList from './TodoListMini.jsx'
+import TodoList from './TodoListMini.jsx';
+import DataFetcher from './DataFetcher.jsx'
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -28,6 +29,8 @@ function App(){
         <Student></Student>
         <Note></Note> */}
         <TodoList></TodoList>
+        <br />
+        <DataFetcher></DataFetcher>
       </div>
     );
   }

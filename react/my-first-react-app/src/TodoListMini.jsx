@@ -2,6 +2,7 @@
 
     // muốn sử dụng hàm useState từ react cần import nó
     import {useState} from 'react';
+    import styles from './TodoList.module.css'
 
     // định nghĩa component
     function TodoList(){
@@ -48,24 +49,26 @@
 
         return(
             // bắt đầu mã jsx -> muốn nhúng js phải dùng qua dấu {}
-            <>
-                <h2 style={{color:'green' , padding:'10px' , backgroundColor:'gray'}}>Todo List Mini</h2>
-                <label htmlFor="task">Thêm task mới : </label>
-                <input id='task' type="text" value={text} onChange={(e) => setText(e.target.value)} />
-                <button onClick={() => addTask(text)}>Thêm</button>
-                <div className='task-list'>
+            <div className={styles.container}>
+                <h1>Todo List Mini</h1>
+                <div className={styles.addSection}>
+                    <input id='todoInput' placeholder='Nhập công việc mới...' type="text" value={text} onChange={(e) => setText(e.target.value)} />
+                    <button id='addBtn' onClick={() => addTask(text)}>Thêm</button>
+                </div>
+                
+                <ul id='todoList'>
                     {
                         // nhúng js và kết hợp với mã jsx trả về 1 mảng jsx -> vì bên trong {} vẫn có thể viết mã jsx và js
                         tasks.map(task =>  
-                            <div className="task-card" key={task.id}>
+                            <div className={styles.todoItem} key={task.id}>
                                 <input type="checkbox" checked={task.completed} onChange={() => updateChecked(task.id)}/>
                                 <span>{task.title}</span>
-                                <button onClick={() => removeTask(task.id)}>Xóa</button>
+                                <button className={styles.deleteBtn} onClick={() => removeTask(task.id)}>Xóa</button>
                             </div>
                         )
                     }
-                </div>
-            </>
+                </ul>
+            </div>
         )
     }
 
