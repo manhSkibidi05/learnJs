@@ -1,39 +1,43 @@
 // Tạo component product list 
 
-    import {useState} from 'react';
+    import {useState , useEffect} from 'react';
     import styles from './ProductList.module.css';
 
     function ProductList(){
-        const [products , setProducts] = useState([
-            {}
-        ]);
+        const [products , setProducts] = useState([]);
         const [keyword , setKeyword] = useState('');
-        const [check , setCheck] = useState(false);
-
-        const productsFilter = keyword.trim() !== '' ? products.filter(prd => prd.title.toLowerCase().includes(keyword.trim().toLowerCase())) : [...products]
+        const [loading , setLoading] = useState(true);
+        const [error , setError] = useState(null);
         
         async function fetchData(url){
-            try{    
+            try{
+                setLoading(true);    
                 const res = await fetch(url);
-                if(!res.ok) throw new Error('Lỗi đường dẫn');
-                const value = await res.json();
-                setProducts(value);
+                if(!res.ok) throw new Error('Lỗi tải sản phẩm');
+                const data = await res.json();
+                setProducts(data);
             }catch(err){
-                console.log(err.message);
+                setError(err.message);
+            }finally{
+                setLoading(false);
             }
         }
 
-        function onceFunc(func , url){
-            if(check) return;
-            func(url);
-            setCheck(true);
-        }
-        onceFunc(fetchData , 'https://fakestoreapi.com/products');
+        useEffect(() => {
+            fetchData('https://fakestoreapi.com/products');
+        } , []);
+        
+        const productsFilter = keyword.trim() 
+        ? products.filter(prd => prd.title.toLowerCase().includes(keyword.trim().toLowerCase())) 
+        : products;
+
+        if(loading) return <div>Đang tải sản phẩm...</div>;
+        if(error) return <div>Lỗi : {error}</div>
 
         return(
             <>
             <div className={styles.searchBox}>
-                <input type="text" id="searchInput" onChange={(e) => setKeyword(e.target.value)}/>
+                <input type="text" id="searchInput" placeholder='Tìm kiếm sản phẩm...' onChange={(e) => setKeyword(e.target.value)}/>
             </div>
             <div className={styles.container}>
                 {
