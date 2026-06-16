@@ -35,7 +35,7 @@ function App(){
         <br />
         <DataFetcher></DataFetcher>
         <br />
-        <ProductList></ProductList>
+        {/* <ProductList></ProductList> */}
       </div>
     );
   }

@@ -1,9 +1,14 @@
 // định nghĩa component counter 
 
-    import {useState} from 'react';
+    import {useState , useEffect} from 'react';
 
     function Counter(){
         const [count , setCount] = useState(0);
+
+        useEffect(() => {
+            document.title = `Bạn đã click ${count} lần`;
+        } , [count]);
+        
         return(
             <>
                 <h2 style={{color : 'blue' , padding: '10px' , backgroundColor:'white'}}>Số lần đếm : {count}</h2>
