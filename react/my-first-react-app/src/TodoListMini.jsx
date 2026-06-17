@@ -1,17 +1,34 @@
 // Định nghĩa module todo list mini 
 
-    // muốn sử dụng hàm useState từ react cần import nó
-    import {useState} from 'react';
+    import {useState , useEffect} from 'react';
     import styles from './TodoList.module.css'
 
-    // định nghĩa component
-    function TodoList(){
-        // khởi tạo các giá trị state tử hàm useState() nhận đối số = giá trị ban đầu của state 
-        // -> useState() trả về 1 mảng có đúng 2 phần tử , ptu đầu state dùng để đọc dữ liệu để hiện thị lên giao diện 
-        // -> ptu sau là setState cho phép thay đổi giá trị state rồi re-render lại component 
+    
+    function TodoList(){ 
         const [tasks , setTasks] = useState([]);
         const [text , setText] = useState('');
         const [filter , setFilter] = useState('all');
+        const [loading , setLoading] = useState(true);
+        const [error , setError] = useState(null);
+        const [page , setPage] = useState(1);
+
+        useEffect(() => {
+            const fetchTasks = async (url) => {
+                try{
+                    setLoading(true);
+                    const res = await fetch(url);
+                    if(!res.ok) throw new Error('Lỗi khi lấy dữ liệu');
+                    const data = await res.json();
+                    setTasks(data);
+                }catch(err){
+                    setError(err.message);
+                }finally{
+                    setLoading(false)
+                }
+            }
+            fetchTasks(`https://jsonplaceholder.typicode.com/todos?_page=${page}&_limit=5`)
+
+        } , [page])
 
         const tasksFilter = tasks.filter(task => {
             if(filter === 'completed') return task.completed === true;
@@ -19,47 +36,57 @@
             return true;
         })
 
-        // hàm thêm phần tử mới vào state tasks
         function addTask(value){
-            // tạo ra biến task mới dựa trên dữ liệu nhận được
             const newTask = {
                 id : new Date().getTime(),
                 title : value,
                 completed : false
             };
-            // chỉnh sửa biến state thông qua hàm setter
             setTasks([...tasks , newTask]);
             setText('');
         }
 
-        // hàm cập nhật lại giá trị bên trong state 
-        function updateChecked(id){
-            // dựa trên giá trị nhận được 
+        function updateChecked(id){ 
             setTasks(
-                // tasks.map trả về 1 mảng mới với các giá trị được thay đổi thông qua hàm callback
                 tasks.map(task => 
-                    // kiểm tra nếu id của 1 task = id cần tìm -> khởi tạo task mới và cập nhật thông tin task đó
-                    // nếu không = trả về task ban đầu
                     task.id === id ? {...task , completed : !task.completed} : task
                 )
             )
         }
 
-        // hàm xóa task 
         function removeTask(id){
-            // dùng tasks.filter trả về 1 mảng mới với các giá trị được lọc dựa trên hàm callback
             setTasks(tasks.filter(val => val.id !== id))
         }
 
-        
+        function nextPage(page){
+            setPage(page => page+=1);
+        }
 
-        // - state chỉ dùng để đọc và gán cho các thuộc tính cần để hiện thị giao diện
-        // - muốn thay đổi dùngg hoàn toàn = setState để có thể cập nhật giá trị nhanh và chuẩn xác nhất 
+        function prevPage(page){
+            if(page === 1) return;
+            setPage(page => page-=1)
+        }
+
+        if(loading) return(
+            <div className={styles.dots}>
+                <span className={styles.dot}></span>
+                <span className={styles.dot}></span>
+                <span className={styles.dot}></span>
+            </div>
+        );
+
+        if(error) return <h2 style={{color:'red'}}>{error}</h2>
 
         return(
-            // bắt đầu mã jsx -> muốn nhúng js phải dùng qua dấu {}
             <div className={styles.container}>
                 <h1>Todo List Mini</h1>
+                <h2>Trang {page}</h2>
+
+                <div className={styles.addSection}>
+                    <button onClick={() => prevPage(page)}>Prev</button>
+                    <button onClick={() => nextPage(page)}>Next</button>
+                </div>
+                
                 <div className={styles.addSection}>
                     <input id='todoInput' placeholder='Nhập công việc mới...' type="text" value={text} onChange={(e) => setText(e.target.value)} />
                     <button id='addBtn' onClick={() => addTask(text)}>Thêm</button>

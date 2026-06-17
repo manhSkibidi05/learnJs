@@ -7,7 +7,8 @@ import Student from './StudentForm.jsx';
 import Note from './Note.jsx';
 import TodoList from './TodoListMini.jsx';
 import DataFetcher from './DataFetcher.jsx';
-import ProductList from './ProductList.jsx'
+import ProductList from './ProductList.jsx';
+import Timer from './Timer.jsx';
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -27,22 +28,20 @@ function App(){
         <br />
         
         <br />
-        <Student></Student>
-        <Note></Note> */}
+        <DataFetcher></DataFetcher>
         <Counter></Counter>
         <br />
+        <Student></Student>
+        <Note></Note> */}
+        
         <TodoList></TodoList>
+        
         <br />
-        <DataFetcher></DataFetcher>
-        <br />
+        <Timer></Timer>
         {/* <ProductList></ProductList> */}
       </div>
     );
   }
 
   export default App;
-// {id : 1 , name : 'Iphone 11' , price : 101},
-//             {id : 2 , name : 'Iphone 12' , price : 15},
-//             {id : 3 , name : 'Iphone 13' , price : 131},
-//             {id : 4 , name : 'Iphone 14' , price : 1},
-//             {id : 5 , name : 'Iphone 15' , price : 1012},
+

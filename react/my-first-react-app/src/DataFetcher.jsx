@@ -1,12 +1,18 @@
 // Định nghĩa component data fetcher 
 
-    import {useState} from 'react';
+    import {useState , useEffect} from 'react';
 
     function DataFetcher(){
         const [isLoading , setLoading] = useState(true);
-        setTimeout(() => {
-            setLoading(false)
-        },3000)
+
+        useEffect(() => {
+            let idTimeout = setTimeout(() => {
+                isLoading = false
+            },2000)
+            return () => {
+                clearTimeout(id)
+            }
+        }, [])
 
         return(
             <>
