@@ -127,3 +127,45 @@ import { useEffect } from "react";
             // 4. Lưu ý 
             // - Nếu bạn sử dụng biến bên trong effect mà biến đó được khai báo bên ngoài effect thì phải đưa biến đó vào dependency trừ khi chắc chắn biến đó không đổi
             
+// - Review (tiếp) : 
+
+    // - useEffect là gì ? sử dụng đề giải quyết vấn đề nào của react ? và sử dụng trong các trường hợp nào ? 
+        
+        // - useEffect là gì : là một hàm đã được định nghĩa của react , sử dụng thông qua import trong thư viện react
+            // + cú pháp : 
+            import {useEffect} from 'react';
+            function MyCom(){
+                useEffect(() => {
+                    // định nghĩa code chạy trong hàm callback
+                    return () =>{
+                        // định nghĩa code chạy trong hàm cleanup
+                    }
+                } , [])// định nghĩa các phần tử nằm trong mảng dependencies
+            } 
+
+        // - useEffect giải quyết vấn đề nào của react : vấn đề xảy ra khi định nghĩa component theo dạng hàm pure (thuần khiết) lúc này
+        // hàm chỉ trả về kết quả dựa trên props và state không bị ảnh hưởng bởi side effect nhưng trong thực tế khi định nghĩa 1 component
+        // cần phải giao tiếp với bên ngoài vd : gọi api , ghi/đọc localStorage... nên cần phải có 1 hàm giải quyết việc giao tiếp này với bên ngoài.
+            
+            // + tại sao lại không viết trực tiếp side effect trong thân component mà phải viết trong hàm useEffect 
+            // -> vì các side effect này chỉ cần chạy 1 lần hoặc chạy khi có các giá trị trong component nó phụ thuộc thay đổi thì mới chạy lại
+            // nên khi đặt side effect trực tiếp trong component mỗi lần re-render thì đều chạy lại gây lãng phí tài nguyên.
+
+            // + side effect là : những ảnh hưởng không gây tác động tới UI (giao diện hiện thị cho người dùng) gây ảnh hưởng tới bên ngoài component
+            // -> ảnh hưởng bên ngoài : đọc ghi localStorage , tạo api kết nối vs server , các hàm bất đồng bộ setTimeout setInterval , sự kiện trực tiếp với DOM 
+
+        // - useEffect sử dụng trong các trường hợp nào 
+        // -> luồng hoạt động của useEffect là chạy sau khi component render xong 
+
+            // 1. side effect chỉ chạy 1 lần đầu tiên không phụ thuộc vào giá trị trong component 
+            // - Để dependency là 1 mảng rỗng , side effect định nghĩa trong hàm callback sau đó gọi nó luôn , có thể định nghĩa hàm cleanup trong vài trường hợp cần dọn dẹp
+            // -> sau khi component được mount (gắn vào DOM) useEffect sẽ chạy và khi bị unmount (gỡ khỏi DOM) cleanup sẽ chạy
+
+            // 2. side effect có thể chạy nhiều lần phụ thuộc vào giá trị thêm vào dependency
+            // - Thêm các giá trị mà side effect phụ thuộc vào mảng dependency có thể bất kì giá trị nào nằm trong pham vi component , có thể định nghĩa cleanup
+            // -> chạy lần đầu khi component mount và chạy lần sau khi 1 trong các giá trị phụ thuộc thay đổi , trước khi chạy các lần mới hàm cleanup sẽ được gọi để dọn dẹp lần cũ nếu có
+
+            // 3. side effect chạy mỗi lần re-render chỉ dùng đề debug
+            // -> không thêm tham số t2 là mảng dependency 
+
+        

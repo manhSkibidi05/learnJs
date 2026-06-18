@@ -7,60 +7,69 @@
     import styles from './ProductList.module.css';
 
     function ProductList(){
-        // khởi tạo state product lưu trữ danh sách sản phẩm
         const [products , setProducts] = useState([]);
-        // khởi tạo state keyword lưu trữ từ khóa giúp tìm sản phẩm
+        const [productsFilter , setProductsFilter] = useState([]) 
         const [keyword , setKeyword] = useState('');
-        // khởi tạo state loading lưu trữ trạng thái component khi chưa lấy dữ liệu thành công sẽ trả về component ở trạng thái loading 
         const [loading , setLoading] = useState(true);
-        // khởi tạo state error lưu trữ trạng thái component khi lấy dữ liệu thất bại sẽ trả về component ở trạng thái thất bại
         const [error , setError] = useState(null);
         
-        // hàm bất đồng bộ lấy dữ liệu api
-        async function fetchData(url){
-            try{
-                // đặt component loading
-                setLoading(true);    
-                // xử lí bất đồng bộ 
-                const res = await fetch(url);
-                if(!res.ok) throw new Error('Lỗi tải sản phẩm');
-                const data = await res.json();
-                // lấy dữ liệu thành công chuyển cho setProducts re-render lại component
-                setProducts(data);
-            }catch(err){
-                // nếu gặp lỗi khi lấy dữ liệu -> đặt component error
-                setError(err.message);
-            }finally{
-                // kể cả khi lỗi hay không lỗi vẫn thực hiện -> xóa component loading 
-                setLoading(false);
-            }
-        }
-
+        // chạy 1 lần để lấy dữ liệu
         useEffect(() => {
+            async function fetchData(url){
+                try{
+                    setLoading(true);    
+                    const res = await fetch(url);
+                    if(!res.ok) throw new Error('Lỗi tải sản phẩm');
+                    const data = await res.json();
+                    setProducts(data);
+                    setProductsFilter(data);
+                }catch(err){
+                    setError(err.message);
+                }finally{
+                    setLoading(false);
+                }
+            }
+
             fetchData('https://fakestoreapi.com/products');
         } , []);
+
+        // chạy khi keyword thay đổi 
+        useEffect(() => {
+            let idTimeout = setTimeout(() => {
+                if(!keyword.trim())  setProductsFilter(products);
+                else{
+                const filtered = products.filter(prd => 
+                        prd.title.toLowerCase().includes(keyword.trim().toLowerCase())
+                        || prd.category.toLowerCase().includes(keyword.trim().toLowerCase())
+                        || prd.description.toLowerCase().includes(keyword.trim().toLowerCase())
+                        
+                    )
+                setProductsFilter(filtered);
+                }
+            } , 500)
+            
+            return () => {
+                if(idTimeout) clearTimeout(idTimeout);
+            }
+
+        } , [keyword , productsFilter])
         
-        // lọc dữ liệu dựa trên từ khóa nếu không có trả về mảng thường , nếu có trả về mảng lọc theo tên  sản phẩm
-        const productsFilter = keyword.trim() 
-        ? products.filter(prd => prd.title.toLowerCase().includes(keyword.trim().toLowerCase())) 
-        : products;
-
-        // trường hợp loading true -> component ở trạng thái loading trả về jsx khi ở trạng thái này
-        if(loading) return <div>Đang tải sản phẩm...</div>;
-        // trường hợp có lỗi -> component ở trạng thái error trả về jsx khi ở trạng thái này 
-        if(error) return <div>Lỗi : {error}</div>
-
-        // trường hợp khi loading false và không lỗi -> component trả về jsx chứa danh sách sản phẩm 
         return(
             <>
             <div className={styles.searchBox}>
                 <input type="text" id="searchInput" placeholder='Tìm kiếm sản phẩm...' onChange={(e) => setKeyword(e.target.value)}/>
             </div>
+            {loading && <div className={styles.dots}>
+                            <span className={styles.dot}></span>
+                            <span className={styles.dot}></span>
+                            <span className={styles.dot}></span>
+                        </div>}
+            {error && <p style={{ color: 'red' }}>❌ Lỗi: {error}</p>}
+
             <div className={styles.container}>
+                {productsFilter.length === 0 && !loading && !error && <h2>Không có sản phẩm nào</h2>}
                 {
-                productsFilter.length === 0 ? 
-                (<h2>Không có sản phẩm nào</h2>) :
-                (productsFilter.map(
+                productsFilter.map(
                     prd => 
                     <div className={styles.productCard} key={prd?.id}>
                         <div className={styles.imageWrapper}>
@@ -80,8 +89,9 @@
                             </div>
                         </div>
                     </div>
-                ))
+                )
                 }
+                
             </div>
             </>
         )

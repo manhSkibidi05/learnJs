@@ -67,16 +67,6 @@
             setPage(page => page-=1)
         }
 
-        if(loading) return(
-            <div className={styles.dots}>
-                <span className={styles.dot}></span>
-                <span className={styles.dot}></span>
-                <span className={styles.dot}></span>
-            </div>
-        );
-
-        if(error) return <h2 style={{color:'red'}}>{error}</h2>
-
         return(
             <div className={styles.container}>
                 <h1>Todo List Mini</h1>
@@ -97,19 +87,23 @@
                     <button onClick={() => setFilter('completed')} className={filter === 'completed' ? styles.active : ''}>Hoàn thành</button>
                     <button onClick={() => setFilter('waiting')} className={filter === 'waiting' ? styles.active : ''}>Chưa làm</button>
                 </div>
-                
+                {loading && <div className={styles.dots}>
+                        <span className={styles.dot}></span>
+                        <span className={styles.dot}></span>
+                        <span className={styles.dot}></span>
+                    </div>}
+
+                {error && <h2 style={{color:'red'}}>{error}</h2>}
+
                 <ul id='todoList'>
+                    {tasksFilter.length === 0 && !loading && !error && <h2 style={{color:'red'}}>Danh sách rỗng</h2> }
                     {   
-                        tasksFilter.length === 0 ? 
-                        ( <h2 style={{color:'red'}}>Danh sách rỗng</h2> ) : 
-                        (
-                            tasksFilter.map(task =>  
-                            <div className={`${styles.todoItem} ${task.completed ? styles.completed :'' }`}  key={task.id}>
-                                <input type="checkbox" checked={task.completed} onChange={() => updateChecked(task.id)}/>
-                                <span>{task.title}</span>
-                                <button className={styles.deleteBtn} onClick={() => removeTask(task.id)}>Xóa</button>
-                            </div>
-                            )
+                        !loading && tasksFilter.map(task =>  
+                        <div className={`${styles.todoItem} ${task.completed ? styles.completed :'' }`}  key={task.id}>
+                            <input type="checkbox" checked={task.completed} onChange={() => updateChecked(task.id)}/>
+                            <span>{task.title}</span>
+                            <button className={styles.deleteBtn} onClick={() => removeTask(task.id)}>Xóa</button>
+                        </div>
                         )
                     }
                 </ul>

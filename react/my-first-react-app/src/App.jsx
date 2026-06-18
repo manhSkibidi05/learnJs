@@ -9,6 +9,7 @@ import TodoList from './TodoListMini.jsx';
 import DataFetcher from './DataFetcher.jsx';
 import ProductList from './ProductList.jsx';
 import Timer from './Timer.jsx';
+import ThemeToggle from './ThemeToggle.jsx'
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -35,9 +36,9 @@ function App(){
         <Note></Note> */}
         
         <TodoList></TodoList>
-        
+        <ThemeToggle></ThemeToggle>
         <br />
-        <Timer></Timer>
+        {/* <Timer></Timer> */}
         {/* <ProductList></ProductList> */}
       </div>
     );
