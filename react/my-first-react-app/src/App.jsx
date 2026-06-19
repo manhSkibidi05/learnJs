@@ -35,11 +35,11 @@ function App(){
         <Student></Student>
         <Note></Note> */}
         
-        <TodoList></TodoList>
+        {/* <TodoList></TodoList> */}
         <ThemeToggle></ThemeToggle>
         <br />
         {/* <Timer></Timer> */}
-        {/* <ProductList></ProductList> */}
+        <ProductList></ProductList>
       </div>
     );
   }

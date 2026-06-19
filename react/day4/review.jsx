@@ -168,4 +168,24 @@ import { useEffect } from "react";
             // 3. side effect chạy mỗi lần re-render chỉ dùng đề debug
             // -> không thêm tham số t2 là mảng dependency 
 
-        
+    // - Câu hỏi tự kiểm tra về useEffect : 
+
+    // 1. useEffect chạy vào thời điểm nào trong lifecycle của component ?
+    // -> khi component đã render và DOM đã cập nhật (sau giai đoạn commit trong lifecycle)
+
+    // 2. mảng denpendencies [] có ý nghĩa gì ? 
+    // -> mảng dependencies chứa các phần tử nằm trong component mà side effect sử dụng và phụ thuộc vào các phần tử đó 
+
+    // 3. clean function dùng  để làm gì ? 
+    // -> clean function chạy trước khi useEffect được gọi lại dùng để dọn dẹp các side effect cũ (clear interval , hủy fetch...)
+    // -> khi component unmount dọn dẹp lần cuối tránh memory leak , tránh cập nhật state trên component ...
+
+    // 4. Tại sao không thể dùng async/await trực tiếp trong callback của useEffect ? 
+    // -> hàm callback của useEffect không được khai báo async vì hàm async phải trả về 1 promise nhưng useEffect yêu cầu callback trả về  1 hàm cleanup hoặc undefined
+    // -> viết useEffect(async () => {}, [dep]) gây lỗi , xử lí bằng cách khai báo hàm async bên trong hàm callback và gọi nó
+
+    // 5. Khi nào cần dùng AbortController trong fetch ?
+    // -> khi cần hủy một fetch request đang chạy khi 
+        // + component unmount
+        // + khi dependencies thay đổi bạn muốn hủy req cũ trc khi gửi req mới 
+        // + trong useEffect dùng AbortController trong cleanup để gọi controller.abort() giúp tiết kiệm tài nguyên

@@ -3,17 +3,15 @@
     import {useState , useEffect} from 'react';
 
     function ThemeToggle(){
-        const [theme , setTheme] = useState('');
+        const [theme , setTheme] = useState(() => {
+            return localStorage.getItem('themeLocal') || 'light';
+        });
 
         useEffect(() => {
             if(!theme) return;
             localStorage.setItem('themeLocal' , theme);
 
         }, [theme]);
-
-        useEffect(() => {
-            setTheme(localStorage.getItem('themeLocal'))
-        }, []);
 
         return <button onClick={() =>setTheme(val => val === 'light' ? 'dark' : 'light')}>Thay đổi theme</button>
     }
