@@ -1,19 +1,18 @@
 // Component theme toggle 
 
     import {useState , useEffect} from 'react';
+    import useLocalStorage from './hooks/useLocalStorage.js'
 
     function ThemeToggle(){
-        const [theme , setTheme] = useState(() => {
-            return localStorage.getItem('themeLocal') || 'light';
-        });
+        const [theme , setTheme , removeTheme] = useLocalStorage('theme' , 'dark');
 
-        useEffect(() => {
-            if(!theme) return;
-            localStorage.setItem('themeLocal' , theme);
-
-        }, [theme]);
-
-        return <button onClick={() =>setTheme(val => val === 'light' ? 'dark' : 'light')}>Thay đổi theme</button>
+        return (
+            <>
+                <h1>Trạng thái theme bây giờ là : {theme} </h1>
+                <button onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}>Thay đổi trạng thái </button>
+                <button onClick={removeTheme}>Xóa trạng thái hiện tại</button>
+            </>
+        )
     }
 
     export default ThemeToggle

@@ -9,7 +9,8 @@ import TodoList from './TodoListMini.jsx';
 import DataFetcher from './DataFetcher.jsx';
 import ProductList from './ProductList.jsx';
 import Timer from './Timer.jsx';
-import ThemeToggle from './ThemeToggle.jsx'
+import ThemeToggle from './ThemeToggle.jsx';
+import ShowWindowSize from './ShowWindowSize.jsx'
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -30,16 +31,17 @@ function App(){
         
         <br />
         <DataFetcher></DataFetcher>
-        <Counter></Counter>
         <br />
         <Student></Student>
         <Note></Note> */}
         
         {/* <TodoList></TodoList> */}
-        <ThemeToggle></ThemeToggle>
+        <Counter></Counter>
+        {/* <ThemeToggle></ThemeToggle> */}
         <br />
         {/* <Timer></Timer> */}
-        <ProductList></ProductList>
+        {/* <ProductList></ProductList> */}
+        <ShowWindowSize></ShowWindowSize>
       </div>
     );
   }

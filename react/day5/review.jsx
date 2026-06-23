@@ -94,4 +94,14 @@
 
     // -> khi gọi custom hook bên trong 1 component thì state của custom hook thực chất là của component và khi thay đổi giá trị state đó sẽ re-render lại component này
 
-    
+// Review ngày 5 (tiếp) : 
+
+    // + custom hook : là hàm js  do người dùng tự định nghĩa , có thể sử dụng các hook đã được định nghĩa sẵn 
+    // bởi react để định nghĩa custom hook 
+
+    // + Quy tắc : bắt buộc phải có use đặt trước tên hàm và trả về giá trị 1 mảng hoặc 1 đối tượng 
+
+    // + Sử dụng custom hook khi : Có thể tái sử dụng lại logic được định nghĩa bên trong custom hook ở nhiều component khác
+    // -> custom hook đóng gói lại logic để có thể mang đi dễ dàng và sử dụng ở nhiều nơi
+    // -> Khi component gọi custom hook thì các hook được gọi ra bên trong custom hook sẽ thuộc về component gọi nó và khi xảy ra sự thay đổi vẫn re-render component
+

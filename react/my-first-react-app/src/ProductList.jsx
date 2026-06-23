@@ -7,22 +7,16 @@
     import styles from './ProductList.module.css';
 
     function ProductList(){
-        const [products , setProducts] = useState([]);
         const [keyword , setKeyword] = useState('');
         const [debounceKeyword , setDebounceKey] = useState('');
         const {data , loading , error} = useFetch('https://fakestoreapi.com/products');
         
-        const productsFilter =debounceKeyword.trim() !== '' ? 
-            products.filter(prd => 
+        const productsFilter = debounceKeyword.trim() !== '' ? 
+            data.filter(prd => 
             prd.title.toLowerCase().includes(debounceKeyword.trim().toLowerCase())
             || prd.category.toLowerCase().includes(debounceKeyword.trim().toLowerCase())
             || prd.description.toLowerCase().includes(debounceKeyword.trim().toLowerCase())
-            )  : products;
-    
-        // chạy 1 lần để lấy dữ liệu
-        useEffect(() => {
-            if(data) setProducts(data)
-        }, [data] )
+            )  : data || [];
 
         // chạy khi keyword thay đổi 
         useEffect(() => {
