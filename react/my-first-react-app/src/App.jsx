@@ -35,7 +35,7 @@ function App(){
         <Student></Student>
         <Note></Note> */}
         
-        {/* <TodoList></TodoList> */}
+        <TodoList></TodoList>
         <Counter></Counter>
         {/* <ThemeToggle></ThemeToggle> */}
         <br />

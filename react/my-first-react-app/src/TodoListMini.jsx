@@ -1,34 +1,32 @@
 // Định nghĩa module todo list mini 
 
     import {useState , useEffect} from 'react';
-    import styles from './TodoList.module.css'
+    import styles from './TodoList.module.css';
+    import useDebounce from './hooks/useDebounce';
 
     
     function TodoList(){ 
         const [tasks , setTasks] = useState([]);
         const [text , setText] = useState('');
-        const [filter , setFilter] = useState('all');
-        const [loading , setLoading] = useState(true);
+        const [filter , setFilter] = useState('all');       
         const [error , setError] = useState(null);
         const [page , setPage] = useState(1);
+        const [pageDebounce , loading ]= useDebounce(page , 1000)
 
         useEffect(() => {
             const fetchTasks = async (url) => {
                 try{
-                    setLoading(true);
                     const res = await fetch(url);
                     if(!res.ok) throw new Error('Lỗi khi lấy dữ liệu');
                     const data = await res.json();
                     setTasks(data);
                 }catch(err){
                     setError(err.message);
-                }finally{
-                    setLoading(false)
                 }
             }
-            fetchTasks(`https://jsonplaceholder.typicode.com/todos?_page=${page}&_limit=5`)
+            fetchTasks(`https://jsonplaceholder.typicode.com/todos?_page=${pageDebounce}&_limit=5`)
 
-        } , [page])
+        } , [pageDebounce])
 
         const tasksFilter = tasks.filter(task => {
             if(filter === 'completed') return task.completed === true;

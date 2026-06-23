@@ -105,3 +105,57 @@
     // -> custom hook đóng gói lại logic để có thể mang đi dễ dàng và sử dụng ở nhiều nơi
     // -> Khi component gọi custom hook thì các hook được gọi ra bên trong custom hook sẽ thuộc về component gọi nó và khi xảy ra sự thay đổi vẫn re-render component
 
+// - Tự kiểm tra 
+
+    // 1. Tại sao custom hook phải bắt đầu bằng use ? 
+    // -> vì theo quy tắc của react mọi hook đều phải bắt đầu bằng use 
+    // -> nếu bạn đặt tên hook không bắt đầu bằng use react không kiểm tra lỗi và các lỗi về hook có thể không được báo -> khó debug
+
+    // 2. Custom hook có thể gọi hook khác không ? 
+    // -> có thể gọi được hook khác 
+    // -> tất cả cả hook cả custom hook đều phải tuân theo quy tắc hook : chỉ gọi ở top level của component hoặc custom hook , không gọi
+    // trong vòng lặp , điều kiện, hàm lồng nhau 
+
+    // 3. Khi nào nên trích xuất logic thành Custom hook ? 
+    // -> khi logic có thể tái sử dụng được ở nhiều các component khác nhau 
+    // -> khi logic quá phức tạp làm component khó đọc 
+    // -> có state và side effect (fetch api , localStorage...) mà bạn muốn tách biệt 
+
+    // 4. Làm thế nào để Custom hook nhận tham số và trả về giá trị linh hoạt ? 
+    // -> Custom hook định nghĩa bằng cách sử dụng 1 hàm js cho phép nhận tham số và trả về bất kì giá trị nào 
+    // -> thông thường custom hook sẽ trả về 1 mảng hoặc 1 obj chứa các giá trị và hàm để component sử dụng 
+
+    // 5. Viết một custom hook đơn giản useCounter
+
+    // định nghĩa custom hook useCounter 
+    
+        import {useState} from 'react';
+    
+        function useCounter(initialVal = 0 , initialStep = 1){
+            const [count , setCount] = useState(initialVal);
+            const [step , setStep] = useState(initialStep);
+    
+            const increment = () => {
+                setCount(prev => prev + step)
+            }
+    
+            const decrement = () => {
+                setCount(prev => prev - step)
+            }
+    
+            const upStep = () => {
+                setStep(prev => prev + 1)
+            }
+    
+            const downStep = () => {
+                setStep(prev => prev - 1)
+            }
+    
+            const resetCount = () => {
+                setCount(0);
+            }
+    
+            return [count , step , increment, decrement , upStep , downStep , resetCount]
+        }
+    
+        export default useCounter;

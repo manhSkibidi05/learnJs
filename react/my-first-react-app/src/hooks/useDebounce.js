@@ -4,10 +4,13 @@
 
     function useDebounce(inputValue , delay = 500){
         const [value , setValue] = useState(inputValue);
+        const [loading , setLoading] = useState(true);
 
         useEffect(() => {
+            setLoading(true);
             let idTimeout = setTimeout(() => {
-                setValue(inputValue)
+                setValue(inputValue);
+                setLoading(false)
             }, delay)
 
             return () => {
@@ -15,7 +18,7 @@
             }
         } , [inputValue , delay])
 
-        return value
+        return [value , loading]
     }
 
-    export default useDebounce
+    export default useDebounce;
