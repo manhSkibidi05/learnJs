@@ -159,3 +159,20 @@
         }
     
         export default useCounter;
+
+// - Ôn tập ngày 5 : 
+
+    // - hook là gì ? tại sao react ghi nhớ các hooks của các component ? 
+    // -> hook là các hàm đặc biệt được khai báo bởi react , giúp sử dụng các tính năng của react state , lifecycle , context ở trong function component 
+    // -> react ghi nhớ các hook của từng component khi re-render cần phải đúng các thứ tự hook chạy ở lần đầu mount 
+
+    // - custom hook là gì ? tại sao cần ? 
+    // -> custom hook là hàm js có thể nhận tham số trả về bất kì dữ liệu nào thường mảng/obj , quy tắc đặt tên bắt buộc phải có use nằm phía trước
+    // -> custom hook cần khi giúp tái sử dụng các logic của custom hook trong nhiều component khác nhau , khi cần tách biệt logic khỏi component làm cho component dễ đọc hơn
+
+    // - có thể sử dụng hook khác trong custom hook được không ? khi component gọi custom hook thì các hook đã được khai báo thuộc quyền sở hữu của ai ? 
+    // -> có thể sử dụng các hook đã được định nghĩa sẵn thậm chí là custom hook khác bên trong custom hook , quy tắc khi khởi tạo các hook phải nằm top level (tầng cao nhất) không nằm trong  điều kiện , vòng lặp
+    // -> khi component gọi custom hook thì các hook bên trong custom hook sẽ được gọi lại theo thứ tự và react trả về trạng thái hiện tại của chúng 
+    // -> custom hook không có state riêng , nó mượn 1 state và các tính năng khác từ component vậy khi component gọi custom hook thì hook là của component gọi nó 
+    
+    

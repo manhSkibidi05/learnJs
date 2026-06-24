@@ -30,4 +30,4 @@
         )
     }
 
-    export default DataFetcher
+    export default DataFetcher;
