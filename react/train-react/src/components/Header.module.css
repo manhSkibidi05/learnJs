@@ -1,0 +1,17 @@
+    .header {
+    background: #333;
+    color: #fff;
+    padding: 1rem;
+    }
+    .header nav {
+    display: flex;
+    gap: 1rem;
+    }
+    .header a {
+    color: #fff;
+    text-decoration: none;
+    }
+    .active {
+    font-weight: bold;
+    text-decoration: underline;
+    }
