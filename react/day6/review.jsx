@@ -132,3 +132,36 @@
         // - Outlet là component đặc biệt react router , nó hoạt động như một placeholder nơi mà route con
         // khớp với URL hiện tại sẽ được render 
 
+// Review ngày 6 (tiếp) :
+
+    // - react router dom : mục đích của sử dụng thư viện này là xây dựng ứng dụng web theo hướng single page application
+    // -> single page application là : ứng dụng web chỉ có 1 trang duy nhất và sẽ được điều hướng thông qua các đường
+    // dẫn sẽ dẫn đến các route và cập nhật giao diện bằng cách loại bỏ component cũ thêm component mới phù hợp với
+    // đường dẫn 
+
+    // -> react route dom cung cấp các component và hook có sẵn để thực hiện việc xây dựng ứng dụng spa 
+
+        // + BrowserRouter : component sử dụng để bọc toàn bộ ứng dụng -> giúp ngăn chặn hành vi reload khi click 
+        // vào đường dẫn và điều hướng đến Routes 
+
+        // + Routes : component sử dụng để bọc các Route -> giúp nhận đường dẫn và khớp với Route 
+
+        // + Route : component sử dụng là điểm dừng của đường dẫn -> định nghĩa các Route thêm các thuộc tính 
+        // path=url : đường dẫn , element=componet : component sẽ gắn vào dom nếu đúng đường dẫn 
+
+        // + Link/NavLink : component sử dụng để điều hướng bằng cách thay đổi đường dẫn hiện tại nhưng không re-load
+
+        // + Outlet : component sử dụng khi cần route lồng nhau -> đặt Outlet trong Route cha thì khi Route con render sẽ là vị trí mà Outlet được đặt trước đó
+
+        // + useParams : lấy giá trị động trên url
+
+    // -> các kĩ thuật thường được áp dụng 
+
+        // + route lồng nhau : sử dụng khi giao diện chỉ thay đổi 1 phần còn các phần xung quanh giữ nguyên 
+        // -> cần định nghĩa component với phần giao diện giữ nguyên và thêm Outlet vào phần giao diện thay đổi
+        // -> khi định nghĩa Route lồng thêm Route con bên trong 
+    
+        // + bảo mật route : sử dụng khi cần xác thực xem đã đủ quyền để truy cập vào Route này hay không
+        // -> cần bọc component cần bảo vệ bởi 1 component xác thực bên ngoài 
+        // -> khi mà xác thực thành công render component được bảo vệ , nếu thất bại chuyển hướng về trang đăng nhập/home...
+        

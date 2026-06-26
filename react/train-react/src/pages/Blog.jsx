@@ -6,7 +6,7 @@
 
     function Blog(){
         const {id} = useParams();
-        const post = blogPosts.find(p => p.id = id);
+        const post = blogPosts.find(p => p.id === parseInt(id));
         console.log(id)
 
         if(!post){

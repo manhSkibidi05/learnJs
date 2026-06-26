@@ -10,8 +10,8 @@
                     <NavLink to='/' end className={({isActive}) => isActive ? styles.active : ''}>
                         Trang chủ
                     </NavLink>
-                    <NavLink to='/about'  className={({isActive}) => isActive ? styles.active : ''}>
-                        Giới thiệu 
+                    <NavLink to='register'  className={({isActive}) => isActive ? styles.active : ''}>
+                        Đăng kí
                     </NavLink>
                 </nav>
             </header>
