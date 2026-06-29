@@ -9,9 +9,11 @@
     import Step2 from './pages/Step2';
     import Step3 from './pages/Step3';
     import Success from './pages/Success';
-    import Products from './pages/Products';
+    import ProductsLayout from './pages/ProductsLayout';
     import Categories from './pages/Categories';
-    import ProductsInCate from './pages/ProductsInCate';
+    import ProductsListLayout from './pages/ProductsListLayout';
+    import ProductsList from './pages/ProductsList';
+    import ProductDetails from './pages/ProductDetails';
 
     function App(){
         return(
@@ -26,10 +28,11 @@
                             <Route path='step3' element={ <Step3 />}></Route>
                             <Route path='success' element={ <Success />}></Route>
                         </Route>
-                        <Route path='products' element={ <Products />}>
+                        <Route path='products' element={ <ProductsLayout />}>
                             <Route index element={<Categories/>}></Route>
-                            <Route path=':category' element={<ProductsInCate/>}>
-                                
+                            <Route path=':category' element={<ProductsListLayout/>}>
+                                <Route index element={<ProductsList />}></Route>
+                                <Route path=':idProduct' element={<ProductDetails/>}></Route>
                             </Route>
                         </Route>
                     </Route>

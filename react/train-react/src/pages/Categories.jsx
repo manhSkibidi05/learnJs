@@ -1,4 +1,4 @@
-// Component render các danh mục đang tồn tại 
+// Component Categories render danh sách các danh mục 
 
     import {Link , useOutletContext} from 'react-router-dom';
     

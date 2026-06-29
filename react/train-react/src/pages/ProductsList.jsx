@@ -1,13 +1,13 @@
-// Component ProductInCate render các sản phẩm dựa vào danh mục 
+// Component ProductsList chứa danh sách sản phẩm hiện thị dựa trên danh mục 
 
-    import {Link , useOutletContext , useParams} from 'react-router-dom';
-    
-    function ProductsInCate(){
-        const {products , categories} = useOutletContext();
+    import {Link , useOutletContext , useParams } from 'react-router-dom';
+
+    function ProductsList(){
+        const {categories , products} = useOutletContext();
         const {category} = useParams();
         const productsRender = products[category]
 
-        return(
+        return (
             <div>
                 <h2>Danh sách các sản phẩm : </h2>
                 {
@@ -23,4 +23,4 @@
         )
     }
 
-    export default ProductsInCate
+    export default ProductsList
