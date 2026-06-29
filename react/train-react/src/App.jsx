@@ -9,6 +9,9 @@
     import Step2 from './pages/Step2';
     import Step3 from './pages/Step3';
     import Success from './pages/Success';
+    import Products from './pages/Products';
+    import Categories from './pages/Categories';
+    import ProductsInCate from './pages/ProductsInCate';
 
     function App(){
         return(
@@ -22,6 +25,12 @@
                             <Route path='step2' element={ <Step2 />}></Route>
                             <Route path='step3' element={ <Step3 />}></Route>
                             <Route path='success' element={ <Success />}></Route>
+                        </Route>
+                        <Route path='products' element={ <Products />}>
+                            <Route index element={<Categories/>}></Route>
+                            <Route path=':category' element={<ProductsInCate/>}>
+                                
+                            </Route>
                         </Route>
                     </Route>
                 </Routes>

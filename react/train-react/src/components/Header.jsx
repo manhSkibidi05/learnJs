@@ -13,6 +13,9 @@
                     <NavLink to='register'  className={({isActive}) => isActive ? styles.active : ''}>
                         Đăng kí
                     </NavLink>
+                    <NavLink to='products'  className={({isActive}) => isActive ? styles.active : ''}>
+                        Sản phẩm
+                    </NavLink>
                 </nav>
             </header>
         );

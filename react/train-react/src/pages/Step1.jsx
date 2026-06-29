@@ -3,15 +3,16 @@
     import { useOutletContext } from "react-router-dom";
 
     function Step1(){
-        const {setEmail , setPassword} = useOutletContext()
+        const {setEmail , setPassword , email , password} = useOutletContext()
 
         return(
             <>
                 <h3>Bước 1</h3>
                 <label htmlFor="email">Nhập email</label>
-                <input type="text" name="email"  onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" name="email" value={email}  onChange={(e) => setEmail(e.target.value)} />
                 <label htmlFor="password">Nhập mật khẩu</label>
-                <input type="password" name="password"  onChange={(e) => setPassword(e.target.value)}/>
+                <input type="password" name="password" value={password}  onChange={(e) => setPassword(e.target.value)}/>
+                {(!email || !password) ? <p style={{color : 'red'}}>Hãy nhập dữ liệu !!</p> :''}
             </>
         )
     }

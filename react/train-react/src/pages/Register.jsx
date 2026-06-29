@@ -32,8 +32,15 @@
             }
         }
 
-        const check = () => {
-            
+        const prev = () => {
+            if(location.pathname === '/register/step1') return '/register';
+            if(location.pathname === '/register/step2') return '/register/step1';
+            if(location.pathname === '/register/step3') return '/register/step2';
+            if(location.pathname === '/register/success') return '/register/step3'
+            return '/register'
+        }
+
+        const next = () => {
             if(location.pathname === '/register') return '/register/step1'
             if(location.pathname === '/register/step1') return '/register/step2';
             if(location.pathname === '/register/step2') return '/register/step3';
@@ -48,8 +55,9 @@
                 <div>
                     <Outlet context={{email , setEmail , password , setPassword , name , setName , age , setAge}}></Outlet>
                 </div>
-
-                <button onClick={() => nagivate(check())}>Bước sau</button>
+                
+                <button onClick={() => nagivate(prev())}>Bước trước</button>
+                <button onClick={() => nagivate(next())}>Bước sau</button>
             </div>
         )
     }
