@@ -3,12 +3,13 @@
     import {Link , useOutletContext} from 'react-router-dom';
     
     function Categories(){
-        const {categories , products} = useOutletContext()
+        const {categories , products} = useOutletContext();
         
         return(
             <div>
                 <h2>Danh sách các danh mục : </h2>
                 {
+                    categories.length === 0 ? <h3>Không có danh mục nào...</h3> :
                     categories.map(category =>
                         <div key={category.id}>
                             <h3>Danh mục : {category.name}</h3>
@@ -20,4 +21,4 @@
         )
     }
 
-    export default Categories
+    export default Categories;

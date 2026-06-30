@@ -5,12 +5,20 @@
     function ProductsList(){
         const {categories , products} = useOutletContext();
         const {category} = useParams();
-        const productsRender = products[category]
+        const categoryValid = categories.find(val => val.id === category)
+        const productsRender = categoryValid ? products[categoryValid.id] : [];
 
         return (
             <div>
                 <h2>Danh sách các sản phẩm : </h2>
                 {
+                    productsRender.length === 0 ?
+                        <div>
+                            <h3>Không có sản phẩm nào dựa trên danh mục này : '{category}'</h3>
+                            <Link to='/products'>Quay lại trang sản phẩm</Link>
+                        </div>
+                        
+                    :
                     productsRender.map(value => 
                         <div key={value.id}>
                             <h3>Tên : {value.name}</h3>

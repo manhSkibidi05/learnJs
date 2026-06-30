@@ -1,18 +1,20 @@
 // Component ProductsLayout làm layout hiện thị danh sách danh mục và sản phẩm 
 
-    import {useParams , Link , Outlet , useLocation } from 'react-router-dom';
+    import {useParams , Link , Outlet } from 'react-router-dom';
     import {categories , products} from '../data/productsData';
 
     function ProductsLayout(){
-        const location = useLocation();
         const {category , idProduct} = useParams();
+        const categoryValid = categories.find(val => val.id === category);
+        let idProductValid;
+        if(categoryValid) idProductValid = products[categoryValid.id].find(val => val.id === idProduct)
         
         return (
             <div>
                 <div style={{display : 'flex'}}>
                     <Link to='/products'><h2>Trang Sản phẩm</h2></Link>
-                    {location.pathname === `/products/${category}` ?<Link to={`/products/${category}`}><h2>_{categories.find(val => val.id === category).name}</h2></Link>: ''}
-                    {location.pathname === `/products/${category}/${idProduct}` ? <h2>_{products[category].find(val => val.id === idProduct).name}</h2> : ''} 
+                    {categoryValid  && <Link to={`/products/${category}`}><h2>_{categoryValid.name}</h2></Link>}
+                    {idProductValid && <h2>_{idProductValid.name}</h2> } 
                 </div>
                 <Outlet context={{categories , products}}>
                 </Outlet>

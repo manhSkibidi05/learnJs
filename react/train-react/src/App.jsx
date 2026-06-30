@@ -15,6 +15,8 @@
     import ProductsList from './pages/ProductsList';
     import ProductDetails from './pages/ProductDetails';
 
+    // component app : chứa bộ định hướng Routes định nghĩa route điểm dừng -> khi đường dẫn thay đổi Routes sẽ re-render 
+    // Routes re-render lại sẽ dựa vào đường dẫn đến route điểm dừng mới sau đó sẽ mount component đó 
     function App(){
         return(
             <>

@@ -165,3 +165,13 @@
         // -> cần bọc component cần bảo vệ bởi 1 component xác thực bên ngoài 
         // -> khi mà xác thực thành công render component được bảo vệ , nếu thất bại chuyển hướng về trang đăng nhập/home...
         
+
+// - Review ngày 6 (cuối) : 
+
+    // - react router dom là : thư viện cung cấp các component và hook để định nghĩa ứng dụng theo hướng 
+    // SPA - single page application 
+    // -> SPA : là ứng dụng mà chỉ dùng 1 trang duy nhất và thay đổi dựa trên đường dẫn không re-load trang
+    // mà nó sẽ render lại trang dựa trên đường dẫn mới Routes sẽ render lại và mount Route phù hợp với 
+    // đường dẫn mới unmout Route cũ 
+
+    

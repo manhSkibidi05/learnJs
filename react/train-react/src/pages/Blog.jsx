@@ -4,10 +4,12 @@
     import blogPosts from '../data/blogPosts';
     import styles from './Blog.module.css';
 
+    // component Blog chứa chi tiết của 1 bài viết dựa trên id động của đường dẫn
     function Blog(){
+        // lấy giá trị động trên đường dẫn sử dụng hook useParams() trả về 1 đối tượng key là từ khóa trên đường dẫn ban đầu :id , value giá trị sau khi thay đổi
+
         const {id} = useParams();
         const post = blogPosts.find(p => p.id === parseInt(id));
-        console.log(id)
 
         if(!post){
             return (
