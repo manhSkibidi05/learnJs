@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import Greeting from './Greeting.jsx';
 import Button from './Button.jsx';
 import UserCard from './UserCard.jsx';
 import Counter from './Counter.jsx';
@@ -10,7 +9,8 @@ import DataFetcher from './DataFetcher.jsx';
 import ProductList from './ProductList.jsx';
 import Timer from './Timer.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
-import ShowWindowSize from './ShowWindowSize.jsx'
+import ShowWindowSize from './ShowWindowSize.jsx';
+import Container from './Container.jsx'
 
 function App(){
   const [isVisible , setVisible] = useState(true);
@@ -19,9 +19,6 @@ function App(){
       <div>
         {/* <h1 style={{visibility: isVisible ? 'visible' : 'hidden', color : 'red' }}>Hello REACT REACT </h1>
         <button onClick={() => setVisible(isVisible => !isVisible)}>Thay đổi h1</button>
-        <Greeting name='hihi'></Greeting>
-        <Greeting name='moy' />
-        <Greeting name='skibidi' />
         <div className='container' style={{color : 'red' , fontSize : '20px' , padding: '10px' , backgroundColor : 'white'}}>
           Con số gì đây : {randomNum} 
         </div>
@@ -42,6 +39,7 @@ function App(){
         {/* <Timer></Timer> */}
         {/* <ProductList></ProductList> */}
         <ShowWindowSize></ShowWindowSize>
+        <Container></Container>
       </div>
     );
   }
